@@ -1,0 +1,3 @@
+# Runtime diagnostic evidence may contain environment-specific details
+evidence/*.txt
+evidence/*.log
