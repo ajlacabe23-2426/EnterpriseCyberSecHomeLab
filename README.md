@@ -23,6 +23,18 @@ The goal is not simply to install virtual machines. The lab is built around **re
 
 ---
 
+## Quick portfolio links
+
+- [Recruiter-facing case study](docs/PORTFOLIO_CASE_STUDY.md)
+- [Core network validation record](docs/core-network-validation-2026-08-27.md)
+- [Evidence index](evidence/README.md)
+
+<p align="center">
+  <img src="./assets/network-architecture.svg" alt="ATLASHOME-LAB network architecture" width="100%" />
+</p>
+
+---
+
 ## Current architecture
 
 ```text
