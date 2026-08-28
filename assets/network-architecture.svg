@@ -1,0 +1,45 @@
+<svg width="1200" height="620" viewBox="0 0 1200 620" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="620"><stop stop-color="#07110F"/><stop offset=".5" stop-color="#0B1B20"/><stop offset="1" stop-color="#07131A"/></linearGradient>
+  <linearGradient id="a" x1="100" y1="80" x2="1100" y2="540"><stop stop-color="#22C55E"/><stop offset=".5" stop-color="#14B8A6"/><stop offset="1" stop-color="#38BDF8"/></linearGradient>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#A7F3D0" stroke-opacity=".05"/></pattern>
+</defs>
+<rect width="1200" height="620" rx="24" fill="url(#bg)"/>
+<rect width="1200" height="620" rx="24" fill="url(#grid)"/>
+<text x="70" y="66" fill="#ECFEF8" font-family="Arial" font-size="30" font-weight="700">ATLASHOME-LAB // NETWORK ARCHITECTURE</text>
+<text x="72" y="95" fill="#8FCFC5" font-family="monospace" font-size="14">10.10.10.0/24 isolated lab network + NAT for controlled outbound access</text>
+
+<rect x="495" y="125" width="210" height="66" rx="12" fill="#10252A" stroke="#38BDF8" stroke-opacity=".55"/>
+<text x="600" y="153" text-anchor="middle" fill="#E8F8FF" font-family="Arial" font-size="18" font-weight="700">INTERNET</text>
+<text x="600" y="176" text-anchor="middle" fill="#9DC5D6" font-family="monospace" font-size="13">VirtualBox NAT</text>
+
+<path d="M600 191V248M600 248H295M600 248H905" stroke="url(#a)" stroke-width="3" fill="none"/>
+
+<rect x="165" y="280" width="260" height="118" rx="14" fill="#0F2226" stroke="#22C55E" stroke-opacity=".6"/>
+<text x="295" y="315" text-anchor="middle" fill="#ECFFF7" font-family="Arial" font-size="21" font-weight="700">DC01</text>
+<text x="295" y="342" text-anchor="middle" fill="#A7E7D9" font-family="Arial" font-size="15">Windows Server</text>
+<text x="295" y="368" text-anchor="middle" fill="#D8FFF5" font-family="monospace" font-size="14">AD DS • DNS • Kerberos</text>
+<text x="295" y="391" text-anchor="middle" fill="#5EEAD4" font-family="monospace" font-size="14">10.10.10.10</text>
+
+<rect x="775" y="280" width="260" height="118" rx="14" fill="#0F2226" stroke="#14B8A6" stroke-opacity=".6"/>
+<text x="905" y="315" text-anchor="middle" fill="#ECFFF7" font-family="Arial" font-size="21" font-weight="700">UBUNTU01</text>
+<text x="905" y="342" text-anchor="middle" fill="#A7E7D9" font-family="Arial" font-size="15">Ubuntu Server</text>
+<text x="905" y="368" text-anchor="middle" fill="#D8FFF5" font-family="monospace" font-size="14">SSH • Linux Admin • Dual NIC</text>
+<text x="905" y="391" text-anchor="middle" fill="#5EEAD4" font-family="monospace" font-size="14">10.10.10.30</text>
+
+<path d="M295 398V455M905 398V455M295 455H905" stroke="url(#a)" stroke-width="3" fill="none"/>
+<rect x="465" y="435" width="270" height="48" rx="10" fill="#10292C" stroke="#2DD4BF" stroke-opacity=".55"/>
+<text x="600" y="464" text-anchor="middle" fill="#E5FFF9" font-family="monospace" font-size="16">ATLASHOME-LAB INTERNAL NETWORK</text>
+
+<path d="M435 455H265V495M765 455H935V495" stroke="url(#a)" stroke-width="3" fill="none"/>
+
+<rect x="130" y="495" width="270" height="92" rx="14" fill="#0E2025" stroke="#38BDF8" stroke-opacity=".5"/>
+<text x="265" y="529" text-anchor="middle" fill="#ECFEFF" font-family="Arial" font-size="20" font-weight="700">Win11-Client01</text>
+<text x="265" y="555" text-anchor="middle" fill="#C9F7F0" font-family="monospace" font-size="14">Windows endpoint</text>
+<text x="265" y="578" text-anchor="middle" fill="#67E8F9" font-family="monospace" font-size="14">10.10.10.20</text>
+
+<rect x="800" y="495" width="270" height="92" rx="14" fill="#0E2025" stroke="#818CF8" stroke-opacity=".5"/>
+<text x="935" y="529" text-anchor="middle" fill="#ECFEFF" font-family="Arial" font-size="20" font-weight="700">Kali01</text>
+<text x="935" y="555" text-anchor="middle" fill="#C9F7F0" font-family="monospace" font-size="14">Security workstation</text>
+<text x="935" y="578" text-anchor="middle" fill="#A5B4FC" font-family="monospace" font-size="14">validation / testing node</text>
+</svg>
