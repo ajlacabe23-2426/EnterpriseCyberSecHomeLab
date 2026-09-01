@@ -1,0 +1,26 @@
+name: Validate lab tooling
+on:
+  push:
+    branches: [main, fix/client01-dc01-connectivity]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  powershell:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        shell: [powershell, pwsh]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse scripts and run behavioral regression tests
+        shell: ${{ matrix.shell }}
+        run: ./tests/run-tests.ps1
+  bash:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Bash syntax and lint
+        run: |
+          bash -n scripts/collect-ubuntu.sh
+          shellcheck scripts/collect-ubuntu.sh

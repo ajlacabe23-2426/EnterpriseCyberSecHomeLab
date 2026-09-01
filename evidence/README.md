@@ -97,3 +97,9 @@ Before committing evidence:
 | 2026-08-27 | [Core Network Validation](../docs/core-network-validation-2026-08-27.md) | Verified |
 
 Future evidence should be linked here as the lab grows.
+
+## Diagnostic reports
+
+The new collectors write Markdown/JSON (Windows) or text (Ubuntu) under `evidence/private/`, which Git ignores recursively. A collection error is never silently reported as a passing validation. Review the declared scope, not just the exit code.
+
+Use [the session template](../docs/templates/SESSION_RECORD.md) to create a deliberately redacted public summary after a live test. Offline regression results belong in engineering validation notes and must not be presented as proof that a VM, login or ACL worked.

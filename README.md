@@ -23,6 +23,22 @@ The goal is not simply to install virtual machines. The lab is built around **re
 
 ---
 
+## Resume the live lab
+
+UBUNTU01 now has an observed working SSH path, an updated running kernel, and an active UFW policy with a successful fresh SSH login. See the [September 1 checkpoint](docs/UBUNTU_RECOVERY_2026-09-01.md) for evidence and limits. Continue with the [Linux authentication exercise](docs/LINUX_AUTHENTICATION_LAB.md) on that guest. For a fresh checkout or a different host, start with [the machine handoff](docs/START_HERE.md).
+
+- [Current state and unverified gates](docs/CURRENT_STATE.md)
+- [Ubuntu recovery and firewall checkpoint](docs/UBUNTU_RECOVERY_2026-09-01.md)
+- [Linux authentication-log exercise](docs/LINUX_AUTHENTICATION_LAB.md)
+- [Network recovery decision table](docs/NETWORK_RECOVERY_RUNBOOK.md)
+- [Networking and domain login exercise](docs/NETWORK_AND_IDENTITY_LAB.md)
+- [SMB access-control exercise](docs/ACCESS_CONTROL_LAB.md)
+- [Authentication-event investigation](docs/DETECTION_LAB.md)
+
+The August 27 milestone below is historical. Current client login, effective share permissions and event visibility still need machine-side proof. Script regression tests are separate from those live gates.
+
+---
+
 ## Quick portfolio links
 
 - [Recruiter-facing case study](docs/PORTFOLIO_CASE_STUDY.md)
