@@ -1,40 +1,37 @@
-# Current State
+# Current state — 2026-09-01
 
-## Known good / previously completed
-- Active Directory domain: `atlasiqlab.local`
-- Domain controller: `DC01`
-- DC01 intended lab address: `10.10.10.10/24`
-- DNS is hosted on DC01.
-- AD users, groups, OUs, and lab shares were previously created.
-- VirtualBox internal-network name used by the lab: `ATLASHOME-LAB`.
+## Recorded live evidence
 
-## Current incident
-CLIENT01 has not yet demonstrated reliable connectivity to DC01 at `10.10.10.10`.
+The [August 27 record](core-network-validation-2026-08-27.md) reports DC01 AD/DNS, Ubuntu dual-NIC routing, lab DNS, SSH listening, and package repair validated. This is a historical checkpoint, not a fresh machine inspection.
 
-The recovery scope is intentionally narrow:
+The older recovery branch described CLIENT01 connectivity as an open incident. The later checkpoint improved the known state but did not prove client membership, fresh domain authentication, or effective SMB authorization. Those gates remain open; do not label the whole lab broken or fully verified.
 
-`CLIENT01 -> VirtualBox internal network -> DC01 -> DNS/AD services`
+## Prepared in this update
 
-Do not rebuild the domain, users, shares, or Active Directory unless evidence proves those components are damaged.
+- Reconciled the existing recovery branch with the current main-branch portfolio documentation.
+- One host-first entrypoint and centralized expected names/addresses.
+- Host inventory with actual VM names, adapter/cable checks and current memory/disk reporting.
+- Client validation of /24 address state, DNS configuration, TCP listeners, default and forced DNS A/SRV answers, DC locator, domain membership and secure channel.
+- DC service, DNS and RBAC inventory, including broad share identities detected by SID.
+- Ubuntu diagnostics and bounded Windows authentication event collection.
+- Behavioral regression tests and Windows PowerShell 5.1 / PowerShell 7 CI plus Bash checks.
+- Three practical exercises and a machine handoff.
 
-## Definition of done
-The incident is closed only when all applicable checks pass:
+## What is not yet proven
 
-- CLIENT01 has a valid lab IPv4 address in `10.10.10.0/24`.
-- CLIENT01 can reach `10.10.10.10`.
-- CLIENT01 uses `10.10.10.10` as DNS for the lab/domain path.
-- `atlasiqlab.local` resolves from CLIENT01.
-- `DC01.atlasiqlab.local` resolves from CLIENT01.
-- TCP 53, 88, 389, and 445 are reachable from CLIENT01 when the corresponding service is expected.
-- Domain discovery succeeds.
-- Root cause, remediation, and validation evidence are recorded.
+| Gate | Status | Required evidence |
+|---|---|---|
+| Current host/VM capacity and topology | Pending local run | HOST report |
+| Current client/DC network and domain trust | Pending local run | CLIENT01 report |
+| Fresh domain-user authentication | Pending local action | Login identity + correlated DC/client event evidence |
+| SMB least privilege | Pending local action | Expected allow and expected deny under separate standard-user sessions |
+| Windows event visibility | Pending local action | Timestamp/account/source/event correlation |
+| Centralized logging/SIEM | Not deployed by this update | Later resource decision and ingestion test |
 
-## Learning objective
-Troubleshoot bottom-up rather than guessing:
+## Next action
 
-1. Virtual NIC / Layer 2
-2. IPv4 addressing / Layer 3
-3. Routing
-4. Host firewall
-5. DNS
-6. Active Directory service discovery
+Run only the host command in [START_HERE](START_HERE.md), then review its report. The assistant cannot inspect or operate the physical Windows host or its guests from the remote repository workspace.
+
+## Delivery status
+
+Publication to the public recovery branch was authorized on September 1. Use [START_HERE](START_HERE.md) to obtain and run this update. GitHub checks validate the tooling; they do not validate the local VMs. The draft PR stays open until the machine-side gates have evidence.

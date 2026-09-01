@@ -1,104 +1,50 @@
-# CLIENT01 to DC01 Network Recovery Runbook
+# Network and identity recovery decision table
 
-## Goal
-Restore the minimum required path for CLIENT01 to communicate with DC01 without rebuilding working lab components.
+Run [START_HERE](START_HERE.md) first. The expected network is `10.10.10.0/24`, DC `.10`, Windows client `.20`, Ubuntu `.30`, domain `atlasiqlab.local`. VM names and baseline values live in `config/lab.psd1`.
 
-## Phase 1 — Host-side VirtualBox inspection
-Run on the Windows host when back at the lab machine.
+| Evidence | Likely boundary | Smallest next action |
+|---|---|---|
+| VM name missing from inventory | Host/registration | Compare actual registered names; inspect VM manager before considering disk recovery. |
+| Wrong Internal Network name or disconnected cable | Layer 2 | Shut the affected guest down cleanly; set its lab NIC to Internal Network `ATLASHOME-LAB`, Cable Connected; preserve NAT and recheck. |
+| Client IP absent, APIPA, wrong prefix or Duplicate | Layer 3 | Match the guest adapter MAC to the VirtualBox lab NIC; inspect existing IPs before setting `.20/24`. Resolve duplicate ownership first. |
+| Selected DC route uses NAT | Routing | Inspect interface/prefix and route table; lab traffic should use an on-link route. Do not make the DC the lab default gateway. |
+| Ping fails, TCP ports work | ICMP policy | Continue with service checks; do not disable the firewall. |
+| All DC TCP checks fail | Link, route, firewall, server power | Review DC power/services and both guest reports before changing firewall rules. |
+| Forced DNS works, configured resolver fails | DNS client selection | Inspect DNS on all active NICs, including NAT and IPv6. AD queries must reach lab DNS. |
+| DC A answer contains `10.0.2.15` | Multihomed DNS regression | Inspect NAT registration, DNS listening, exact stale A record and cache. Preserve the lab A record. |
+| A records work, SRV or locator fails | AD DNS/service discovery | Inspect `_ldap._tcp.dc._msdcs`, Netlogon/KDC/DNS state and time. |
+| NetworkOnly passes, membership fails | Client domain join | Confirm Windows guest edition supports AD join, use the lab console and an authorized domain credential, reboot, revalidate. |
+| Membership passes, secure channel fails | Trust/time/reachability | Compare clock and DC locator, then investigate machine trust; do not immediately remove/rejoin the domain. |
+| Login works, share access wrong | Authorization | Use the [access-control exercise](ACCESS_CONTROL_LAB.md). Authentication and authorization are separate. |
 
-Confirm both VMs are powered off before changing adapter settings.
-
-For each VM, verify:
-- the lab-facing adapter exists,
-- it is enabled,
-- Attached To = **Internal Network**,
-- Name = **ATLASHOME-LAB** exactly,
-- Cable Connected = enabled.
-
-A typo in the internal-network name creates two isolated virtual switches even if everything else looks correct.
-
-## Phase 2 — CLIENT01 evidence
-Open PowerShell on CLIENT01 from the repository root and run:
-
-```powershell
-Set-ExecutionPolicy -Scope Process Bypass -Force
-.\scripts\collect-client01.ps1
-```
-
-Do not change IP or DNS settings yet.
-
-Primary questions:
-- Which NIC is the lab NIC?
-- Does it have a `10.10.10.x/24` address?
-- Is it showing APIPA `169.254.x.x`?
-- Is a wrong gateway or route present?
-- Can it ARP/ping `10.10.10.10`?
-- Can it reach DNS/Kerberos/LDAP/SMB ports?
-
-## Phase 3 — DC01 evidence
-Run on DC01:
+## Inspection commands inside the Windows client
 
 ```powershell
-Set-ExecutionPolicy -Scope Process Bypass -Force
-.\scripts\collect-dc01.ps1
+Get-NetAdapter | Format-Table Name,ifIndex,MacAddress,Status
+Get-NetIPAddress -AddressFamily IPv4 | Format-Table InterfaceIndex,IPAddress,PrefixLength,AddressState
+Get-DnsClientServerAddress
+Find-NetRoute -RemoteIPAddress 10.10.10.10
+Get-NetNeighbor -AddressFamily IPv4
 ```
 
-Confirm:
-- DC01 still owns `10.10.10.10/24` on the lab NIC,
-- DNS, Netlogon, and AD DS-related services are healthy,
-- Windows Firewall profile/state is known,
-- the lab NIC is Up,
-- DC01 has not lost or reassigned the intended address.
+Do not paste a guessed interface index into a configuration command. Keep the VirtualBox console available during a network change. Capture original values first; change one cause and rerun the same checks.
 
-## Phase 4 — Interpret the failure
+## If client domain join is the only missing step
 
-### A. CLIENT01 has no lab NIC
-Likely layer: VirtualBox configuration.
+Use Windows **Settings > System > About > Domain or workgroup / advanced system settings > Computer Name > Change** in the client guest. Join `atlasiqlab.local` using the credential prompt. Windows Home cannot join on-premises AD; that limitation concerns the guest edition, not the physical host's ability to run VirtualBox.
 
-Action: repair adapter attachment before touching Windows networking.
+After the join/reboot, run the full client validator elevated and then perform a standard domain-user login. Never put passwords in scripts, Git, screenshots or chat.
 
-### B. CLIENT01 has 169.254.x.x
-Likely layer: no valid static/DHCP configuration on that interface.
+## What the port checks do not establish
 
-Action: identify the correct lab interface, then configure a valid unused `10.10.10.x/24` address only after confirming DC01 is `10.10.10.10/24`.
+TCP 53/88/135/389/445 checks are useful path probes, not an exhaustive AD firewall test. AD also uses UDP and dynamic RPC, and requirements vary by operation. A TCP connection does not prove protocol health. The secure-channel and real login/share exercises provide additional evidence.
 
-### C. CLIENT01 has 10.10.10.x but cannot reach 10.10.10.10
-Likely layers:
-- mismatched VirtualBox internal-network names,
-- disconnected virtual cable,
-- incorrect subnet mask,
-- duplicate IP,
-- firewall filtering,
-- wrong interface/route.
+## Ubuntu DNS note
 
-Use ARP, routing, and port tests before modifying firewall policy.
+With two NICs, adding a DNS server to one interface does not by itself prove every application query uses it. The `.local` suffix also needs care with mDNS-aware resolvers. Compare `resolvectl status`, `resolvectl query DC01.atlasiqlab.local` and `getent ahostsv4 DC01.atlasiqlab.local`. Review active Netplan files before editing; preserve the NAT route and use the console if applying changes.
 
-### D. IP connectivity works but names fail
-Likely layer: DNS.
+## References
 
-CLIENT01's lab/domain DNS server should be `10.10.10.10` for AD name resolution.
-
-### E. DNS works but domain discovery fails
-Move upward to AD/Kerberos/LDAP/Netlogon checks. Do not blame networking once the lower layers have passed.
-
-## Phase 5 — Validation
-After remediation, run on CLIENT01:
-
-```powershell
-.\scripts\verify-domain-path.ps1
-```
-
-Save the generated evidence output.
-
-## Evidence to retain
-Record:
-- failing symptom,
-- failing layer,
-- root cause,
-- exact remediation,
-- commands/tests used,
-- PASS evidence,
-- what was learned.
-
-## Interview explanation
-Use the incident to demonstrate a structured troubleshooting method: verify the virtual network and NIC first, then IPv4/routing, then firewall, then DNS, then Active Directory service discovery. This shows that the fix was evidence-driven rather than a sequence of guesses.
+- [Oracle VirtualBox networking](https://www.virtualbox.org/manual/ch06.html)
+- [Microsoft Resolve-DnsName](https://learn.microsoft.com/en-us/powershell/module/dnsclient/resolve-dnsname)
+- [Microsoft Test-ComputerSecureChannel](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/test-computersecurechannel) — use on a domain member, not a DC.

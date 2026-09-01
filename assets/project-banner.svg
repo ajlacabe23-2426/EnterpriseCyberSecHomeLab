@@ -1,0 +1,17 @@
+<svg width="1200" height="290" viewBox="0 0 1200 290" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="290"><stop stop-color="#07110F"/><stop offset=".55" stop-color="#0B1B20"/><stop offset="1" stop-color="#07131A"/></linearGradient>
+  <linearGradient id="a" x1="80" y1="40" x2="1120" y2="250"><stop stop-color="#22C55E"/><stop offset=".48" stop-color="#14B8A6"/><stop offset="1" stop-color="#38BDF8"/></linearGradient>
+  <pattern id="g" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0V36" fill="none" stroke="#A7F3D0" stroke-opacity=".06"/></pattern>
+</defs>
+<rect width="1200" height="290" rx="24" fill="url(#bg)"/><rect width="1200" height="290" rx="24" fill="url(#g)"/>
+<g fill="none" stroke="url(#a)" stroke-opacity=".38" stroke-width="2">
+<rect x="955" y="72" width="120" height="65" rx="8"/><rect x="920" y="168" width="80" height="50" rx="8"/><rect x="1035" y="168" width="80" height="50" rx="8"/>
+<path d="M1015 137v20M960 157h115M960 157v11M1075 157v11"/>
+</g>
+<rect x="82" y="62" width="8" height="128" rx="4" fill="url(#a)"/>
+<text x="120" y="108" fill="#ECFEF8" font-family="Arial,Helvetica,sans-serif" font-size="42" font-weight="700" letter-spacing="1">ENTERPRISE CYBERSECURITY HOMELAB</text>
+<text x="122" y="151" fill="#9ED9CF" font-family="Arial,Helvetica,sans-serif" font-size="18" letter-spacing="2.5">WINDOWS • LINUX • ACTIVE DIRECTORY • NETWORKING</text>
+<text x="122" y="194" fill="#D9FFF7" font-family="Arial,Helvetica,sans-serif" font-size="21">Build it. Break it. Troubleshoot it. Secure it. Prove it.</text>
+<text x="84" y="247" fill="#5EEAD4" font-family="monospace" font-size="14">AD DS • DNS • SSH • SMB • RBAC • SEGMENTATION • VALIDATION EVIDENCE</text>
+</svg>

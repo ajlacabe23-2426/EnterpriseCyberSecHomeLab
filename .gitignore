@@ -1,3 +1,12 @@
 # Runtime diagnostic evidence may contain environment-specific details
 evidence/*.txt
 evidence/*.log
+evidence/private/
+*.evtx
+*.pcap
+*.pcapng
+*.zip
+*.pem
+*.key
+.env
+__pycache__/
