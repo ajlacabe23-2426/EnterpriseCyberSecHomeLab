@@ -23,7 +23,7 @@ The workflow is prepared to run the test suite under Windows PowerShell 5.1 and 
 
 ## Pending machine evidence
 
-VirtualBox inventory, current resource budget, client/DC path, standard-user authentication, effective SMB authorization and event correlation are pending. The draft PR remains open for the live verification gate; neither this document nor a green CI run closes the lab incident.
+Manual host inventory and Ubuntu console observations are now recorded in the [September 1 recovery checkpoint](UBUNTU_RECOVERY_2026-09-01.md). They do not constitute a completed collector run or multi-VM capacity verification. Client/DC path, fresh domain-user authentication, effective SMB authorization and event correlation remain pending. The draft PR remains open for the live verification gate; neither this document nor a green CI run closes the lab incident.
 
 ## Publication status
 
