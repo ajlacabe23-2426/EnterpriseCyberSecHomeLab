@@ -13,7 +13,7 @@ These observations come from user-provided Windows and Ubuntu screenshots and pa
 - Only UBUNTU01 was instructed to start. It reached a login shell with its existing allocation. This demonstrates that one Ubuntu guest could boot in the observed conditions; it does not prove capacity for the other guests or the complete lab.
 - Windows Start/Search recovery was not confirmed.
 
-## Ubuntu observations
+## Ubuntu observations before patching
 
 | Check | Observed result |
 |---|---|
@@ -41,7 +41,9 @@ Windows showvminfo output filtered for Forwarding returned no matching rules. Th
 & "$env:ProgramFiles\Oracle\VirtualBox\VBoxManage.exe" controlvm "UBUNTU01" natpf1 "ubuntu-ssh,tcp,127.0.0.1,2222,10.0.2.15,22"
 ```
 
-The supplied connection command used SSH to 127.0.0.1 on port 2222 with the user's existing Ubuntu account. The user then supplied an Ubuntu welcome banner and shell prompt. This is evidence of a successful login after the procedure; the screenshot does not independently expose SSH_CONNECTION, the authentication method or the host-key verification step. Capture those session/log details next. Reconnection and forwarding persistence after a VM restart remain untested.
+The supplied connection command used SSH to 127.0.0.1 on port 2222 with the user's existing Ubuntu account. The user then supplied an Ubuntu welcome banner and shell prompt. Subsequent journal output recorded an accepted password and session opening at September 1, 23:06:06 from 10.0.2.2, consistent with the VirtualBox NAT path. Older August 27 failed passwords from 10.10.10.10 were followed by an accepted login; they are separate historical events. The host-key verification step was not captured.
+
+An attempted environment-variable check used mixed-case SSH_Connection. Linux variable names are case-sensitive; its empty output cannot establish the connection type. The correct variable is SSH_CONNECTION. The journal provides the observed authentication evidence.
 
 The rule targets Ubuntu TCP port 22 through the NAT adapter and binds the host side to loopback. It leaves the internal lab network unchanged. Do not repeatedly add the same named rule; inspect existing rules first. To remove this particular rule while the guest is running:
 
@@ -49,9 +51,9 @@ The rule targets Ubuntu TCP port 22 through the NAT adapter and binds the host s
 & "$env:ProgramFiles\Oracle\VirtualBox\VBoxManage.exe" controlvm "UBUNTU01" natpf1 delete "ubuntu-ssh"
 ```
 
-## Next machine checks
+## Security checks, patching and firewall activation
 
-Run these as separate commands in the Ubuntu shell:
+The user ran these checks as separate commands in the Ubuntu shell:
 
 ```bash
 echo "$SSH_CONNECTION"
@@ -60,7 +62,38 @@ sudo ufw status verbose
 sudo journalctl -u ssh.service -n 15 --no-pager
 ```
 
-Interpret the session endpoints, expected listeners, firewall policy and recent authentication events before changing access controls. Keep console access available when later changing SSH or firewall settings. Then verify repository/DNS access, refresh package metadata and apply the applicable updates. The banner alone does not establish current patch counts or completed patching.
+Observed listeners included SSH on TCP/22 for IPv4 and IPv6, loopback DNS on port 53, and the NAT-facing DHCP client on UDP/68. UFW was inactive, and its added-rules report showed no custom user rules.
+
+The user was instructed to run apt update, then apt upgrade. The supplied ending output showed service restarts and a request to reboot for a new kernel. After the requested guest reboot, later screenshots showed:
+
+| Check | Observed result |
+|---|---|
+| Running kernel from uname -r | 6.8.0-138-generic, changed from 6.8.0-137-generic |
+| Failed-unit query | 0 loaded units listed |
+| sudo dpkg --audit | No findings printed |
+| Post-upgrade login banner | 0 updates can be applied immediately |
+| Guest usage in login banner | 14% memory, 0% swap; not a host-capacity measurement |
+
+The zero-update banner describes that observation and configured update sources; it is not a guarantee that every vulnerability is remediated. Full update logs were not collected.
+
+The following UFW configuration was applied in the guest:
+
+```bash
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow in on enp0s3 from 10.0.2.2 to any port 22 proto tcp
+sudo ufw allow in on enp0s8 from 10.10.10.0/24 to any port 22 proto tcp
+sudo ufw enable
+sudo ufw status verbose
+```
+
+The status screenshot confirmed active UFW, logging on at low level, default deny incoming / allow outgoing, and both intended SSH rules. Activation reported enablement on system startup. A fresh SSH login was then requested from a second Windows PowerShell window; the user supplied the new login screen at 23:34:42 and the updated kernel output. This is the successful allowed-access test after activation. It does not test blocked traffic or prove the internal-network rule with another guest.
+
+Guest-reboot recovery and fresh access were observed during this sequence. Persistence after a full VirtualBox power-off/start cycle and UFW behavior after its next reboot have not yet been tested. Keep console access available when later changing SSH or firewall settings.
+
+## Next action
+
+Perform the [single-attempt Linux authentication exercise](LINUX_AUTHENTICATION_LAB.md). Correlate a deliberately wrong password with its rejection event. The exercise is prepared; no new controlled failure result has been supplied yet. Authentication rejection is distinct from a network firewall denial.
 
 DC01/client connectivity, domain authentication, effective SMB authorization and centralized detection remain separate open gates. This checkpoint does not mark the entire lab healthy.
 
