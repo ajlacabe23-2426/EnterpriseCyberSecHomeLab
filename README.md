@@ -1,227 +1,86 @@
 <p align="center">
-  <img src="./assets/project-banner.svg" alt="Enterprise Cybersecurity Homelab" width="100%" />
+  <img src="./assets/project-banner.svg" alt="Enterprise Cyber Lab V2" width="100%" />
 </p>
 
-<p align="center">
-  <strong>An enterprise-style lab for hands-on infrastructure, cybersecurity, troubleshooting, and validation.</strong>
-</p>
+# Enterprise Cyber Lab V2
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Active%20Directory-Live-1D4ED8?style=for-the-badge&logo=microsoft" />
-  <img src="https://img.shields.io/badge/Linux-Ubuntu-FCC624?style=for-the-badge&logo=linux&logoColor=111" />
-  <img src="https://img.shields.io/badge/Network-ATLASHOME--LAB-0F766E?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Status-Active%20Build-14532D?style=for-the-badge" />
-</p>
+**MacBook migration in progress · Original VM roles and accomplishments preserved · Purple team planned**
 
----
+Enterprise Cyber Lab V2 continues the original enterprise cybersecurity homelab on
+an Apple Silicon MacBook using UTM. The goal is to retain the original Windows,
+Linux, identity, networking and access-control work, then add repeatable purple-team
+exercises with evidence of detection, remediation and retesting.
 
-## What this lab is
+## Current direction
 
-This repository documents a hands-on enterprise cybersecurity homelab designed to reinforce the skills expected in IT support, systems administration, security operations, and junior cybersecurity roles.
+- **Host:** MacBook Air M3, ARM64, 8 GB unified memory, using UTM.
+- **Scope:** retain the original four VM roles; add the planned SEC01 logging/detection role.
+- **Network:** private `ATLASHOME-LAB` plus shared/NAT connectivity where needed.
+- **Domain target:** preserve `atlasiqlab.local` and the original identity/access-control design.
+- **Status:** migration and revalidation in progress. Original Windows/VirtualBox results
+  remain V1 evidence; they are not proof that the same controls already work on the Mac.
 
-The goal is not simply to install virtual machines. The lab is built around **repeatable workflows, real troubleshooting, access control, evidence collection, and the ability to explain what happened and why**.
+## VM continuity
 
----
+| Original VM / role | V2 purpose | Mac migration status |
+| --- | --- | --- |
+| DC01 | Active Directory, domain identity and DNS | Preserve role and domain; Mac guest implementation and validation pending |
+| Win11-Client01 | Windows domain workstation and access-control testing | Preserve role; rebuild/transfer and domain rejoin validation pending |
+| UBUNTU01 | Linux administration, SSH and controlled lab target | Ubuntu ARM64 built; SSH, Internet/DNS and dual-NIC configuration reported verified |
+| Kali01 / KALI01 | Security testing workstation for owned lab targets | Desktop reached and connectivity success reported; exact V2 network/SSH evidence still to capture |
+| SEC01 | Centralized logging, detection and blue-team workstation/server | Planned addition; not yet verified as built |
 
-## Quick portfolio links
+V2 preserves the original VM roles and work. Any hostname changes will be recorded
+explicitly rather than silently replacing the original inventory. The five-role
+inventory remains the target; simultaneous runtime allocations will be checked
+against the actual 8 GB host.
 
-- [Recruiter-facing case study](docs/PORTFOLIO_CASE_STUDY.md)
-- [Core network validation record](docs/core-network-validation-2026-08-27.md)
+## Migration checkpoint — 2026-09-02
+
+UBUNTU01 has shared/NAT address `192.168.64.2` and lab address `10.10.10.20/24`
+on `enp0s2`, as reported during the Mac build. Kali reached its desktop and a
+successful ping was reported after connectivity troubleshooting; its exact V2
+address and successful SSH session are not yet recorded here.
+
+**Address reconciliation required:** the original Windows client used
+`10.10.10.20`, while V1 Ubuntu used `10.10.10.30`. Do not assign the old Windows
+client address unchanged alongside the new Ubuntu. Record a unique V2 address
+plan before reconnecting the complete inventory.
+
+[Migration and revalidation checklist](docs/ENTERPRISE_CYBER_LAB_V2.md)
+
+## Planned purple team
+
+The purple team coordinates three roles within the owned, isolated lab:
+
+| Role | Responsibility | Evidence |
+| --- | --- | --- |
+| Red team | Run a scoped, repeatable lab security test | Target, expected behavior and test timestamps |
+| Blue team | Observe telemetry, investigate and improve controls | Logs, detection result and remediation |
+| Verifier | Repeat the same test and check expected allowed/denied behavior | Before/after result, residual gaps and retest outcome |
+
+Each exercise follows **scope → test → observe → remediate → retest → document**.
+A finding is closed only when its expected outcome is verified. The purple-team
+workflow is planned; it is not yet claimed as operational.
+
+## Preserved original work
+
+- Windows Server, AD DS, DNS and the `atlasiqlab.local` domain.
+- Users, groups, organizational units, RBAC and share-permission work.
+- Dual-NIC networking, SSH and Linux administration.
+- Multihomed domain-controller DNS troubleshooting and remediation.
+- Existing scripts, configuration records, validation notes and evidence.
+
+Previously open checks remain open: domain-user authentication, effective SMB/NTFS
+access, centralized telemetry and repeatable incident/detection exercises.
+
+## Documentation and evidence
+
+- [V2 migration, scope and purple-team plan](docs/ENTERPRISE_CYBER_LAB_V2.md)
+- [Original V1 overview](docs/V1_OVERVIEW.md)
+- [Portfolio case study and V1 accomplishments](docs/PORTFOLIO_CASE_STUDY.md)
+- [Original core network validation — 2026-08-27](docs/core-network-validation-2026-08-27.md)
 - [Evidence index](evidence/README.md)
 
-<p align="center">
-  <img src="./assets/network-architecture.svg" alt="ATLASHOME-LAB network architecture" width="100%" />
-</p>
-
----
-
-## Current architecture
-
-```text
-                         Internet
-                            │
-                 VirtualBox NAT adapters
-                            │
-        ┌───────────────────┴───────────────────┐
-        │                                       │
-      DC01                                  UBUNTU01
-  Windows Server                           Ubuntu Server
-  AD DS + DNS                              SSH + Linux admin
-  10.10.10.10                              10.10.10.30
-        │                                       │
-        ├──────────── ATLASHOME-LAB ────────────┤
-        │         isolated internal network      │
-        │                                       │
- Win11-Client01                              Kali01
- Windows endpoint                       Security workstation
- 10.10.10.20
-```
-
-### Core systems
-
-| System | Role | Lab address |
-|---|---|---:|
-| **DC01** | Windows Server / Domain Controller / DNS | `10.10.10.10` |
-| **Win11-Client01** | Windows domain client | `10.10.10.20` |
-| **UBUNTU01** | Linux server / SSH target | `10.10.10.30` |
-| **Kali01** | Security testing workstation | Lab network |
-| **ATLASHOME-LAB** | Isolated VirtualBox internal network | `10.10.10.0/24` |
-
-Domain: `atlasiqlab.local`
-
----
-
-## Verified milestone
-
-### Core network validation — 2026-08-27
-
-The lab reached a functioning end-to-end network state with Windows and Linux systems communicating over the isolated internal network while retaining controlled outbound access.
-
-Verified:
-
-- Active Directory Domain Services running on DC01
-- DNS, Kerberos, Netlogon, and NTDS healthy
-- `atlasiqlab.local` resolves through the lab-facing domain controller
-- DC01 lab interface configured at `10.10.10.10/24`
-- Windows client DNS record present at `10.10.10.20`
-- Ubuntu dual-NIC configuration validated
-- Ubuntu reaches DC01 across the internal network
-- Ubuntu retains outbound internet through NAT
-- Ubuntu uses DC01 for lab DNS resolution
-- OpenSSH Server enabled and listening on TCP/22
-- Ubuntu package-management interruption remediated with `dpkg --configure -a`
-
-Detailed evidence: [Core Network Validation Record](docs/core-network-validation-2026-08-27.md)
-
----
-
-## Troubleshooting case study
-
-### Multihomed domain-controller DNS issue
-
-One of the most important failures in the build involved a domain controller with both NAT-facing and lab-facing network interfaces.
-
-The NAT-facing address was being used in a way that interfered with domain DNS behavior.
-
-### Remediation
-
-- Kept the NAT interface for outbound access
-- Preserved the isolated lab-facing interface for domain traffic
-- Prevented the NAT-facing address from being treated as the domain DNS endpoint
-- Restricted DNS service behavior to the intended lab interface
-- Revalidated name resolution and internal connectivity
-
-### Lesson
-
-A service can be **running** and still be incorrectly bound, advertised, or routed.
-
-That distinction matters in real troubleshooting: validate not only whether a service exists, but **which interface it is using, what address clients resolve, and what path the traffic actually takes**.
-
----
-
-## Skills demonstrated
-
-### Windows / Identity
-- Active Directory Domain Services
-- DNS
-- Domain architecture
-- Users, groups, and organizational structure
-- RBAC and permission reasoning
-- Windows client/server troubleshooting
-
-### Linux
-- Ubuntu Server administration
-- SSH
-- Package management
-- Network-interface configuration
-- DNS-client configuration
-- Service verification
-
-### Networking
-- VirtualBox NAT
-- Internal network segmentation
-- Static addressing
-- DNS resolution
-- Endpoint-to-server connectivity
-- Multi-NIC troubleshooting
-
-### Security
-- Access control
-- Least-privilege thinking
-- SMB/share-permission validation
-- Security evidence collection
-- Detection / monitoring planning
-- Security workstation integration
-
-### IT support discipline
-- Problem isolation
-- Layered troubleshooting
-- Verification commands
-- Root-cause analysis
-- Remediation documentation
-- Interview-ready technical explanation
-
----
-
-## Evidence-driven workflow
-
-```text
-DEFINE
-  ↓
-INSPECT
-  ↓
-DECIDE
-  ↓
-EXECUTE
-  ↓
-VERIFY
-  ↓
-LEARN
-  ↓
-DOCUMENT
-```
-
-Every meaningful lab milestone should leave behind at least one of these:
-
-- validation output
-- configuration evidence
-- troubleshooting record
-- remediation notes
-- architecture documentation
-- repeatable procedure
-
-That makes the lab useful both technically and as a portfolio artifact.
-
----
-
-## Current validation targets
-
-1. Confirm Windows client domain membership and domain-user authentication
-2. Validate SMB share permissions and remove overly broad access
-3. Add centralized logging and security telemetry
-4. Build repeatable incident-response and detection exercises
-5. Capture recruiter/interview-ready evidence for each major workflow
-
----
-
-## Why this repo matters
-
-This project is meant to answer a simple question during interviews:
-
-> **“What have you actually built, configured, broken, fixed, and verified?”**
-
-Instead of answering only with theory, this repository provides concrete evidence of real systems work.
-
-The strongest outcomes from the lab are not the virtual machines themselves—they are the **troubleshooting decisions, validation evidence, access-control reasoning, and repeatable operational procedures** produced while building them.
-
----
-
-## Portfolio focus
-
-This homelab is intentionally aligned with entry-level and early-career roles across:
-
-**IT Support • Systems Administration • SOC / Security Operations • Cybersecurity • Infrastructure Support • Junior Security Engineering**
-
-<p align="center">
-  <sub>Build it. Break it. Troubleshoot it. Secure it. Prove it.</sub>
-</p>
+The existing repository URL remains stable so earlier links and history continue
+to work. The project display name and current documentation are Enterprise Cyber Lab V2.

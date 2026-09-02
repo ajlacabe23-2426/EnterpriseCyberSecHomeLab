@@ -1,6 +1,6 @@
 # Evidence Index
 
-This directory structure is the evidence catalog for the Enterprise Cybersecurity Homelab.
+This directory structure is the evidence catalog for Enterprise Cyber Lab V2 and its preserved V1 history.
 
 The goal is to preserve **proof of configuration, troubleshooting, remediation, and validation** without storing credentials or sensitive personal data.
 
@@ -90,10 +90,18 @@ Before committing evidence:
 - include enough surrounding information to make the evidence understandable;
 - pair screenshots with a short Markdown explanation when context is important.
 
-## Current verified records
+## Recorded checkpoints
 
 | Date | Record | Status |
 |---|---|---|
-| 2026-08-27 | [Core Network Validation](../docs/core-network-validation-2026-08-27.md) | Verified |
+| 2026-08-27 | [Core Network Validation](../docs/core-network-validation-2026-08-27.md) | Verified in V1; Mac parity pending |
+| 2026-09-02 | [V2 migration checkpoint](../docs/ENTERPRISE_CYBER_LAB_V2.md) | Partial, user-reported Mac progress; full migration and purple team pending |
 
 Future evidence should be linked here as the lab grows.
+
+## V2 migration and purple-team evidence
+
+Include the lab version, host/guest architecture and VM role with each new record.
+Keep V1 evidence intact. A V2 exercise record should include its authorized scope,
+red-team test, blue-team observations, remediation, verifier retest and unresolved
+gaps. Mark untested controls as pending; do not reuse V1 evidence as a V2 pass.

@@ -1,4 +1,10 @@
-# Portfolio Case Study — Enterprise Cybersecurity Homelab
+# Portfolio Case Study — Enterprise Cyber Lab V2
+
+The active project is migrating to MacBook/UTM as **Enterprise Cyber Lab V2**,
+with the original VM roles retained and a purple-team workflow planned. See the
+[V2 migration record](ENTERPRISE_CYBER_LAB_V2.md). The implementation results below
+describe the original V1 Windows/VirtualBox environment and are preserved as
+historical accomplishments; Mac parity is being revalidated.
 
 ## Project objective
 
@@ -8,7 +14,7 @@ The project is designed to answer a practical interview question:
 
 > What have you actually configured, broken, fixed, verified, and documented?
 
-## Environment
+## Original V1 environment
 
 The lab uses VirtualBox with a dual-network design:
 
@@ -119,7 +125,7 @@ A successful fix is stronger when it leaves behind:
 - technical documentation
 - verification and evidence collection
 
-## Current development path
+## Original outstanding checks carried into V2
 
 The next lab work focuses on:
 
