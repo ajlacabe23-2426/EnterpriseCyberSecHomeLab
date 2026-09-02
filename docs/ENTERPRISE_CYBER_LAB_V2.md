@@ -4,6 +4,19 @@ Decision recorded: 2026-09-02. AJ has officially selected the MacBook as the new
 lab host. V2 retains the original VM roles, configurations, accomplishments and
 learning objectives while adding a planned purple-team workflow.
 
+## Dedicated machine responsibilities
+
+| Machine | Assigned work |
+| --- | --- |
+| MacBook | Entire Enterprise Cyber Lab V2: original VM roles, planned SEC01 and purple-team practice |
+| Lenovo | AtlasIQ, Projects 6 and 7, and eventually Project 5; original Windows lab VMs will be removed by AJ |
+
+This is a complete lab move, not a lab split across two hosts. The purpose is to
+reduce the RAM pressure experienced on the Lenovo and dedicate the Mac to hands-on
+lab practice. VM removal is planned, not performed by this documentation update.
+The Mac's actual available memory and workload performance will be measured during
+practice; total installed RAM alone does not establish how many VMs run comfortably.
+
 ## Host and implementation status
 
 The reported host is a MacBook Air M3 (ARM64), 8 GB unified memory, using UTM.
@@ -19,7 +32,7 @@ the Windows Server/domain-controller role, before claiming it is transferred.
 | Role | Historical V1 identity/address | Recorded V2 state |
 | --- | --- | --- |
 | Domain controller / DNS | DC01, `10.10.10.10` | Domain and role retained as requirements; guest choice/address verification pending |
-| Windows workstation | Win11-Client01, `10.10.10.20` | Pending; old address conflicts with current V2 Ubuntu |
+| Windows workstation | Win11-Client01, `10.10.10.20` | Pending; assign a unique address within the Mac lab |
 | Linux server | UBUNTU01, `10.10.10.30` | ARM64 Ubuntu; NAT `192.168.64.2`; LAB `10.10.10.20/24`, `enp0s2`; SSH/Internet/DNS/dual NIC reported verified |
 | Security workstation | Kali01 | KALI01 desktop reached; successful connectivity reported; exact V2 IP, routes and SSH evidence pending |
 | Logging / detection | SEC01, planned | Planned blue-team role; no completed installation claimed |
@@ -32,7 +45,7 @@ must remain labeled V1.
 
 - [ ] Preserve the original VM backups, scripts, configuration exports and evidence.
 - [ ] Record each guest's architecture, OS, hostname, RAM and disk allocation.
-- [ ] Define unique V2 private addresses; resolve the Ubuntu/Windows `.20` collision.
+- [ ] Define unique V2 private addresses on the Mac; historical Lenovo IPs need not be retained.
 - [ ] Verify each NIC, subnet, default route, DNS resolver and required connectivity.
 - [ ] Restore or rebuild the AD/DNS role and verify `atlasiqlab.local` resolution.
 - [ ] Recreate/restore the existing OU, users, groups and membership relationships.

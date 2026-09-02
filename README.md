@@ -20,6 +20,19 @@ exercises with evidence of detection, remediation and retesting.
 - **Status:** migration and revalidation in progress. Original Windows/VirtualBox results
   remain V1 evidence; they are not proof that the same controls already work on the Mac.
 
+## Dedicated machine responsibilities
+
+| Machine | Assigned work |
+| --- | --- |
+| MacBook | Entire Enterprise Cyber Lab V2: original VM roles, planned SEC01 and purple-team practice |
+| Lenovo | AtlasIQ, Projects 6 and 7, and eventually Project 5; original Windows lab VMs will be removed by AJ |
+
+This is a complete lab move, not a lab split across two hosts. The purpose is to
+reduce the RAM pressure experienced on the Lenovo and dedicate the Mac to hands-on
+lab practice. VM removal is planned, not performed by this documentation update.
+The Mac's actual available memory and workload performance will be measured during
+practice; total installed RAM alone does not establish how many VMs run comfortably.
+
 ## VM continuity
 
 | Original VM / role | V2 purpose | Mac migration status |
@@ -42,10 +55,10 @@ on `enp0s2`, as reported during the Mac build. Kali reached its desktop and a
 successful ping was reported after connectivity troubleshooting; its exact V2
 address and successful SSH session are not yet recorded here.
 
-**Address reconciliation required:** the original Windows client used
-`10.10.10.20`, while V1 Ubuntu used `10.10.10.30`. Do not assign the old Windows
-client address unchanged alongside the new Ubuntu. Record a unique V2 address
-plan before reconnecting the complete inventory.
+**V2 addressing:** use a fresh, unique address plan for the VMs on the Mac.
+Retired Lenovo VM addresses are historical references, not a cross-host conflict.
+The rebuilt Windows workstation and Ubuntu still need distinct addresses within
+the Mac's shared lab subnet; old IP assignments do not have to be preserved.
 
 [Migration and revalidation checklist](docs/ENTERPRISE_CYBER_LAB_V2.md)
 
