@@ -4,7 +4,7 @@
 
 # Enterprise Cyber Lab V2
 
-**MacBook migration in progress · Original VM roles and accomplishments preserved · Purple team planned**
+**MacBook migration in progress · Original VM roles and accomplishments preserved · First manual purple-team workflow verified**
 
 Enterprise Cyber Lab V2 continues the original enterprise cybersecurity homelab on
 an Apple Silicon MacBook using UTM. The goal is to retain the original Windows,
@@ -14,17 +14,16 @@ exercises with evidence of detection, remediation and retesting.
 ## Current direction
 
 - **Host:** MacBook Air M3, ARM64, 8 GB unified memory, using UTM.
-- **Scope:** retain the original four VM roles; add the planned SEC01 logging/detection role.
+- **Scope:** retain the original four VM roles; add the SEC01 logging/detection role.
 - **Network:** private `ATLASHOME-LAB` plus shared/NAT connectivity where needed.
 - **Domain target:** preserve `atlasiqlab.local` and the original identity/access-control design.
-- **Status:** migration and revalidation in progress. Original Windows/VirtualBox results
-  remain V1 evidence; they are not proof that the same controls already work on the Mac.
+- **Status:** migration and revalidation in progress. The Linux red/target/blue path is now operational and the first manual purple-team workflow has been verified. Original Windows/VirtualBox results remain V1 evidence; they are not proof that the same Windows/AD controls already work on the Mac.
 
 ## Dedicated machine responsibilities
 
 | Machine | Assigned work |
 | --- | --- |
-| MacBook | Entire Enterprise Cyber Lab V2: original VM roles, planned SEC01 and purple-team practice |
+| MacBook | Entire Enterprise Cyber Lab V2: original VM roles, SEC01 and purple-team practice |
 | Lenovo | AtlasIQ, Projects 6 and 7, and eventually Project 5; original Windows lab VMs will be removed by AJ |
 
 This is a complete lab move, not a lab split across two hosts. The purpose is to
@@ -39,9 +38,9 @@ practice; total installed RAM alone does not establish how many VMs run comforta
 | --- | --- | --- |
 | DC01 | Active Directory, domain identity and DNS | Preserve role and domain; Mac guest implementation and validation pending |
 | Win11-Client01 | Windows domain workstation and access-control testing | Preserve role; rebuild/transfer and domain rejoin validation pending |
-| UBUNTU01 | Linux administration, SSH and controlled lab target | Ubuntu ARM64 built; SSH, Internet/DNS and dual-NIC configuration reported verified |
-| Kali01 / KALI01 | Security testing workstation for owned lab targets | Desktop reached and connectivity success reported; exact V2 network/SSH evidence still to capture |
-| SEC01 | Centralized logging, detection and blue-team workstation/server | Planned addition; not yet verified as built |
+| UBUNTU01 | Linux administration, SSH and controlled lab target | Ubuntu ARM64 built; SSH, Internet/DNS, dual-NIC configuration, UFW enforcement and firewall-log generation verified |
+| Kali01 / KALI01 | Security testing workstation for owned lab targets | Built and operational on `10.10.10.30`; scoped Nmap testing against UBUNTU01 verified |
+| SEC01 | Centralized logging, detection and blue-team workstation/server | Built and operational on `10.10.10.50`; centralized rsyslog TCP/514 ingestion from UBUNTU01 and UFW event correlation verified |
 
 V2 preserves the original VM roles and work. Any hostname changes will be recorded
 explicitly rather than silently replacing the original inventory. The five-role
@@ -52,8 +51,7 @@ against the actual 8 GB host.
 
 UBUNTU01 has shared/NAT address `192.168.64.2` and lab address `10.10.10.20/24`
 on `enp0s2`, as reported during the Mac build. Kali reached its desktop and a
-successful ping was reported after connectivity troubleshooting; its exact V2
-address and successful SSH session are not yet recorded here.
+successful ping was reported after connectivity troubleshooting.
 
 **V2 addressing:** use a fresh, unique address plan for the VMs on the Mac.
 Retired Lenovo VM addresses are historical references, not a cross-host conflict.
@@ -62,7 +60,7 @@ the Mac's shared lab subnet; old IP assignments do not have to be preserved.
 
 [Migration and revalidation checklist](docs/ENTERPRISE_CYBER_LAB_V2.md)
 
-## Planned purple team
+## Purple team — operational V1 checkpoint
 
 The purple team coordinates three roles within the owned, isolated lab:
 
@@ -72,9 +70,35 @@ The purple team coordinates three roles within the owned, isolated lab:
 | Blue team | Observe telemetry, investigate and improve controls | Logs, detection result and remediation |
 | Verifier | Repeat the same test and check expected allowed/denied behavior | Before/after result, residual gaps and retest outcome |
 
-Each exercise follows **scope → test → observe → remediate → retest → document**.
-A finding is closed only when its expected outcome is verified. The purple-team
-workflow is planned; it is not yet claimed as operational.
+Each exercise follows **test → detect → analyze → change → retest → restore → verify**.
+A finding is closed only when its expected outcome is verified.
+
+### Verified workflow — 2026-09-04
+
+The first complete manual purple-team workflow is now verified across:
+
+```text
+KALI01 10.10.10.30
+        ↓ scoped Nmap probes
+UBUNTU01 10.10.10.20
+        ↓ UFW block + log
+SEC01 10.10.10.50
+        ↓ centralized evidence
+Verifier retest
+```
+
+The exercise proved the observable state transition for TCP/8080:
+
+```text
+FILTERED → CLOSED → OPEN → FILTERED
+```
+
+This was achieved by changing one control at a time: baseline UFW deny, temporary
+firewall allow with no listener, temporary HTTP listener, then full restoration of
+the original secure state. SEC01 received the matching UFW telemetry and the final
+Kali retest confirmed that TCP/8080 returned to filtered.
+
+[Full purple-team workflow validation — 2026-09-04](docs/purple-team-workflow-validation-2026-09-04.md)
 
 ## Preserved original work
 
@@ -84,12 +108,14 @@ workflow is planned; it is not yet claimed as operational.
 - Multihomed domain-controller DNS troubleshooting and remediation.
 - Existing scripts, configuration records, validation notes and evidence.
 
-Previously open checks remain open: domain-user authentication, effective SMB/NTFS
-access, centralized telemetry and repeatable incident/detection exercises.
+Previously open Windows/AD checks remain open: domain-user authentication and
+effective SMB/NTFS access on the rebuilt V2 Windows roles. Centralized Linux
+telemetry and one repeatable detection/remediation/retest exercise are now verified.
 
 ## Documentation and evidence
 
 - [V2 migration, scope and purple-team plan](docs/ENTERPRISE_CYBER_LAB_V2.md)
+- [Purple-team workflow validation — 2026-09-04](docs/purple-team-workflow-validation-2026-09-04.md)
 - [Original V1 overview](docs/V1_OVERVIEW.md)
 - [Portfolio case study and V1 accomplishments](docs/PORTFOLIO_CASE_STUDY.md)
 - [Original core network validation — 2026-08-27](docs/core-network-validation-2026-08-27.md)
