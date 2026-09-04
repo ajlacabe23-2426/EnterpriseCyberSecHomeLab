@@ -95,7 +95,8 @@ Before committing evidence:
 | Date | Record | Status |
 |---|---|---|
 | 2026-08-27 | [Core Network Validation](../docs/core-network-validation-2026-08-27.md) | Verified in V1; Mac parity pending |
-| 2026-09-02 | [V2 migration checkpoint](../docs/ENTERPRISE_CYBER_LAB_V2.md) | Partial, user-reported Mac progress; full migration and purple team pending |
+| 2026-09-02 | [V2 migration checkpoint](../docs/ENTERPRISE_CYBER_LAB_V2.md) | Partial Mac migration; Linux networking operational |
+| 2026-09-04 | [Purple-Team Workflow Validation](../docs/purple-team-workflow-validation-2026-09-04.md) | **Verified — first complete manual red/blue/verifier loop** |
 
 Future evidence should be linked here as the lab grows.
 
@@ -105,3 +106,8 @@ Include the lab version, host/guest architecture and VM role with each new recor
 Keep V1 evidence intact. A V2 exercise record should include its authorized scope,
 red-team test, blue-team observations, remediation, verifier retest and unresolved
 gaps. Mark untested controls as pending; do not reuse V1 evidence as a V2 pass.
+
+The 2026-09-04 checkpoint establishes the first verified V2 purple-team baseline:
+KALI01 generated scoped probes, UBUNTU01 enforced and logged UFW policy, SEC01
+received the centralized telemetry, a controlled TCP/8080 state transition was
+performed, and the original filtered state was restored and retested successfully.
