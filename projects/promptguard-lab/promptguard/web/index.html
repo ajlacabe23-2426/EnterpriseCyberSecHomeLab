@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Local-only educational AI prompt-injection detection lab.">
+  <title>PromptGuard Lab | Detection workbench</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail" aria-label="Workbench identity">
+      <div class="brand-mark">PG<span> / </span>01</div>
+      <div class="rail-label">ENTERPRISE CYBER LAB V2</div>
+      <div class="rail-divider"></div>
+      <div class="rail-section">TRAINING MODULE</div>
+      <div class="rail-item selected"><span class="rail-icon">◈</span> Detection workbench</div>
+      <div class="rail-item"><span class="rail-icon">◇</span> Text analysis</div>
+      <div class="rail-divider"></div>
+      <div class="rail-card">
+        <div class="rail-card-title"><span class="status-dot"></span> LOCAL MODE</div>
+        <p>Python standard library. Loopback server. No third-party APIs or external model calls.</p>
+      </div>
+      <div class="rail-bottom">SECURITY RESEARCH<br>EDUCATIONAL PROTOTYPE / V1</div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumb">CYBER LAB <span>/</span> AI SECURITY <span>/</span> PROMPTGUARD</div>
+        <div class="top-tag"><span class="status-dot"></span> OFFLINE SCREENING</div>
+      </header>
+      <div class="content">
+        <div class="eyebrow">DETECTION ENGINE <span class="eyebrow-dot"></span> TRUST BOUNDARIES</div>
+        <h1>PromptGuard<span class="accent">.</span></h1>
+        <p class="lede">Analyze untrusted text for possible prompt-injection signals. Investigate rule matches, understand limitations, and practice defensible security triage.</p>
+        <div class="notice" role="note"><strong>RESEARCH ONLY</strong><span>A detection is an indicator—not proof of an attack. An empty report does not certify safety. Use fictional, non-sensitive test content.</span></div>
+        <div class="workspace-grid">
+          <section class="panel input-panel" aria-labelledby="source-heading">
+            <div class="panel-head"><div><div class="panel-label">01 / INPUT</div><h2 id="source-heading">Untrusted content</h2></div><span class="pill">LOCAL ONLY</span></div>
+            <p class="panel-note">Paste a harmless sample or use the demo. The application does not store or log submitted source text.</p>
+            <label class="field-label" for="source-text">SOURCE TEXT</label>
+            <textarea id="source-text" maxlength="100000" spellcheck="false" placeholder="Paste fictional text for defensive screening…"></textarea>
+            <div class="input-meta"><span>No real passwords, API keys, or personal data</span><span id="character-count">0 / 100,000</span></div>
+            <div class="actions">
+              <button class="button primary" id="analyze-button" type="button">Analyze text <span aria-hidden="true">↗</span></button>
+              <button class="button outline" id="demo-button" type="button">Load demo</button>
+              <button class="button quiet" id="clear-button" type="button">Clear</button>
+            </div>
+            <p id="request-status" class="request-status" aria-live="polite">Ready for local analysis.</p>
+          </section>
+          <section class="panel results-panel" aria-labelledby="result-heading">
+            <div class="panel-head"><div><div class="panel-label">02 / CLASSIFICATION</div><h2 id="result-heading">Security report</h2></div><span class="pill">HEURISTIC</span></div>
+            <div id="risk-band" class="risk-band idle">
+              <div class="risk-symbol" id="risk-symbol" aria-hidden="true">◎</div>
+              <div><div class="risk-caption">CURRENT RESULT</div><div id="risk-value" class="risk-value">AWAITING SCAN</div><p id="risk-explainer" class="risk-description">Run a scan to inspect configured defensive indicators.</p></div>
+            </div>
+            <div class="metrics">
+              <div class="metric"><span>RULE MATCHES</span><strong id="match-count">—</strong></div>
+              <div class="metric"><span>UNIQUE RULES</span><strong id="unique-rules">—</strong></div>
+              <div class="metric"><span>REVIEW LEVEL</span><strong id="review-level">—</strong></div>
+            </div>
+            <div class="divider"></div>
+            <div class="findings-header"><h3>Indicator evidence</h3><span id="findings-count">NO SCAN</span></div>
+            <div id="findings" class="findings" aria-live="polite"><p class="empty-state">Findings and safe character-offset references will appear here. Source text is never included in the report.</p></div>
+          </section>
+        </div>
+        <div class="lower-grid">
+          <section class="panel analysis-note">
+            <div class="panel-label">03 / ANALYST NOTES</div>
+            <h2>Interpret with context.</h2>
+            <p id="recommendation">A rule match should trigger investigation of its source and the privileges available to the AI application—not an automatic verdict.</p>
+          </section>
+          <section class="panel limitations">
+            <div class="panel-label">04 / LIMITATIONS</div>
+            <h2>Know the blind spots.</h2>
+            <p>Pattern-based screening can flag benign quotations and miss subtle redirections. Real defense also requires source isolation, least privilege, and explicit approval for sensitive actions.</p>
+          </section>
+        </div>
+        <footer>PROMPTGUARD LAB V1 <span>LOCALHOST ONLY • EVIDENCE-FIRST DETECTION • NO MODEL EXECUTION</span></footer>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
