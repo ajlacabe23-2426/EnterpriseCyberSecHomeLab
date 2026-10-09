@@ -1,0 +1,28 @@
+{
+  "schema": "incident-case-input-v1",
+  "case_id": "LAB-CASE-002",
+  "soc_report": {
+    "schema": "soc-detection-lab-v1",
+    "mode": "OFFLINE_EDUCATIONAL_TRIAGE",
+    "source_lines": 3,
+    "recognized_events": 2,
+    "skipped_lines": 1,
+    "alerts": []
+  },
+  "audit_report": {
+    "schema": "linux-hardening-report-v1",
+    "mode": "OFFLINE_READ_ONLY_SNAPSHOT",
+    "checks": [
+      {
+        "check_id": "ufw_status",
+        "status": "pass"
+      }
+    ],
+    "summary": {
+      "pass": 1,
+      "review": 0,
+      "fail": 0,
+      "not_checked": 0
+    }
+  }
+}
