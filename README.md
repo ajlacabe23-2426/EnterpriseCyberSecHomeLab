@@ -112,6 +112,12 @@ Previously open Windows/AD checks remain open: domain-user authentication and
 effective SMB/NTFS access on the rebuilt V2 Windows roles. Centralized Linux
 telemetry and one repeatable detection/remediation/retest exercise are now verified.
 
+## Defensive AI security learning module
+
+**PromptGuard Lab v1** is an offline Python exercise for recognizing possible prompt-injection instructions in untrusted text. It includes transparent rules, fictional test fixtures, false-positive/false-negative analysis, and automated regression tests. It is an educational detector, not a production security boundary.
+
+[Open PromptGuard Lab](projects/promptguard-lab/README.md)
+
 ## Documentation and evidence
 
 - [V2 migration, scope and purple-team plan](docs/ENTERPRISE_CYBER_LAB_V2.md)
