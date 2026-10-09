@@ -26,6 +26,12 @@ jobs:
       - name: Run offline prompt-injection screening tests
         working-directory: projects/promptguard-lab
         run: python -m unittest discover -s promptguard -p 'test_*.py' -v
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+      - name: Syntax-check local dashboard JavaScript
+        working-directory: projects/promptguard-lab
+        run: node --check promptguard/web/app.js
       - name: Reproduce toy-fixture evaluation
         working-directory: projects/promptguard-lab
         run: python -m promptguard.evaluate
