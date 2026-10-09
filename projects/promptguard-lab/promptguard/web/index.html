@@ -23,7 +23,7 @@
         <div class="rail-card-title"><span class="status-dot"></span> LOCAL MODE</div>
         <p>Python standard library. Loopback server. No third-party APIs or external model calls.</p>
       </div>
-      <div class="rail-bottom">SECURITY RESEARCH<br>EDUCATIONAL PROTOTYPE / V1</div>
+      <div class="rail-bottom">SECURITY RESEARCH<br>EDUCATIONAL PROTOTYPE / V3</div>
     </aside>
     <main class="main">
       <header class="topbar">
@@ -39,6 +39,14 @@
           <section class="panel input-panel" aria-labelledby="source-heading">
             <div class="panel-head"><div><div class="panel-label">01 / INPUT</div><h2 id="source-heading">Untrusted content</h2></div><span class="pill">LOCAL ONLY</span></div>
             <p class="panel-note">Paste a harmless sample or use the demo. The application does not store or log submitted source text.</p>
+            <label class="field-label" for="source-type">SOURCE CONTEXT</label>
+            <select id="source-type" aria-describedby="source-type-note">
+              <option value="unknown">Unknown / not yet verified</option>
+              <option value="retrieved_document" selected>Retrieved document or webpage</option>
+              <option value="tool_output">External tool output</option>
+              <option value="direct_user">Direct user message</option>
+            </select>
+            <p id="source-type-note" class="panel-note">Source labels are analyst-supplied and never grant elevated authority.</p>
             <label class="field-label" for="source-text">SOURCE TEXT</label>
             <textarea id="source-text" maxlength="100000" spellcheck="false" placeholder="Paste fictional text for defensive screening…"></textarea>
             <div class="input-meta"><span>No real passwords, API keys, or personal data</span><span id="character-count">0 / 100,000</span></div>
@@ -70,6 +78,7 @@
             <div class="panel-label">03 / ANALYST NOTES</div>
             <h2>Interpret with context.</h2>
             <p id="recommendation">A rule match should trigger investigation of its source and the privileges available to the AI application—not an automatic verdict.</p>
+            <p id="source-guidance" aria-live="polite">Choose a source category to learn how its trust boundary should be handled.</p>
           </section>
           <section class="panel limitations">
             <div class="panel-label">04 / LIMITATIONS</div>
@@ -77,7 +86,7 @@
             <p>Pattern-based screening can flag benign quotations and miss subtle redirections. Real defense also requires source isolation, least privilege, and explicit approval for sensitive actions.</p>
           </section>
         </div>
-        <footer>PROMPTGUARD LAB V1 <span>LOCALHOST ONLY • EVIDENCE-FIRST DETECTION • NO MODEL EXECUTION</span></footer>
+        <footer>PROMPTGUARD LAB V3 <span>LOCALHOST ONLY • EVIDENCE-FIRST DETECTION • NO MODEL EXECUTION</span></footer>
       </div>
     </main>
   </div>

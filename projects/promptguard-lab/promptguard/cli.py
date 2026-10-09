@@ -7,12 +7,13 @@ import json
 import sys
 from pathlib import Path
 
-from .detector import MAX_CHARS, scan_text
+from .detector import MAX_CHARS, SOURCE_GUIDANCE, scan_text
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Offline PromptGuard defensive text screening")
     parser.add_argument("--file", type=Path, help="Local UTF-8 input file; otherwise read standard input")
+    parser.add_argument("--source-type", choices=tuple(SOURCE_GUIDANCE), default="unknown", help="Analyst-supplied origin classification; never grants authority")
     args = parser.parse_args(argv)
     try:
         if args.file:
@@ -22,7 +23,7 @@ def main(argv: list[str] | None = None) -> int:
             text = args.file.read_text(encoding="utf-8")
         else:
             text = sys.stdin.read(MAX_CHARS + 1)
-        report = scan_text(text)
+        report = scan_text(text, source_type=args.source_type)
     except (OSError, UnicodeError, TypeError, ValueError) as exc:
         print(json.dumps({"error": str(exc)}), file=sys.stderr)
         return 2

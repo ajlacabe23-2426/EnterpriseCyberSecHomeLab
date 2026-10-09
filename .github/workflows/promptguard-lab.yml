@@ -35,3 +35,19 @@ jobs:
       - name: Reproduce toy-fixture evaluation
         working-directory: projects/promptguard-lab
         run: python -m promptguard.evaluate
+      - name: Verify V3 development and holdout evaluation
+        working-directory: projects/promptguard-lab
+        run: |
+          python -m promptguard.evaluation_v3 > /tmp/promptguard-v3-evaluation.json
+          python - <<'PY'
+          import json
+          with open('/tmp/promptguard-v3-evaluation.json', encoding='utf-8') as handle:
+              report = json.load(handle)
+          assert report['schema'] == 'promptguard-evaluation-v3'
+          assert report['development']['total'] == 20
+          assert report['holdout']['total'] == 16
+          for label in ('development', 'holdout'):
+              result = report[label]
+              assert result['tp'] + result['tn'] + result['fp'] + result['fn'] == result['total']
+          print('Development/holdout metrics reproducible and internally consistent')
+          PY

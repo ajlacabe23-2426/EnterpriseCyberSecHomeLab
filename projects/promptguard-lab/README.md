@@ -50,6 +50,50 @@ The dashboard and scanner are designed for fictional training data, not real
 passwords, confidential documents, or sensitive personal information.
 
 
+## Source-aware investigation and frozen evaluation (V3)
+
+V3 adds an **analyst-selected source category** to the local dashboard and CLI:
+`unknown`, `direct_user`, `retrieved_document`, and `tool_output`. All four
+remain **untrusted**, and the same text receives the same rule matches and
+risk label regardless of source. The context adds defensive next-step
+guidance; it never grants elevated message authority or permits tools
+to run. Untrusted text remains data, not executable instructions.
+
+For a local command-line scan with explicit provenance:
+
+```bash
+python -m promptguard.cli --source-type retrieved_document --file /path/to/fictional-example.txt
+```
+
+The JSON report includes a `source_context` section recording the selected
+type, the fixed "untrusted" trust level, and safe handling guidance.
+
+To reproduce the expanded *synthetic* benchmark:
+
+```bash
+python -m promptguard.evaluation_v3
+```
+
+- The 36 **hand-authored** cases are split into 20 *development* examples and
+  16 *holdout* examples. They contain only fictional, harmless phrases.
+- Results include TP, TN, FP, FN, precision, recall, specificity, input-source
+  counts, and identifiers for misclassified cases. Original text is not echoed.
+- The holdout is preserved across development iterations to discourage tuning
+  rules directly to every example.
+- These examples are intentionally small and authored by the same project;
+  this is an *educational regression suite*, not independent real-world
+  validation or evidence the detector can reliably prevent attacks.
+- Quoted descriptions can be falsely flagged, and subtle redirections can
+  still be missed. Do not suppress findings merely because the text claims to
+  be an example; manually investigate the surrounding context.
+
+**Portfolio exercise:** analyze the development and holdout confusion
+matrices. Explain one false positive, one missed case, and why source
+metadata improves triage without establishing trust. Document your
+proposed defensive controls: data/instruction separation, restricted
+tools, and human approval for sensitive operations.
+
+
 ## Interpreting results
 
 - `low_signal`: none of this version's rules matched; **not a safety certificate**.

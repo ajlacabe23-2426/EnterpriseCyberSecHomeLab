@@ -10,7 +10,6 @@ import argparse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 from pathlib import Path
-from urllib.parse import urlsplit
 
 from .detector import scan_text
 
@@ -110,10 +109,10 @@ class Handler(BaseHTTPRequestHandler):
             payload = json.loads(self.rfile.read(length))
         except (UnicodeError, json.JSONDecodeError):
             return self._error(400, "Invalid JSON")
-        if not isinstance(payload, dict) or set(payload) != {"text"}:
-            return self._error(400, "Expected a JSON object with only text")
+        if not isinstance(payload, dict) or "text" not in payload or not set(payload) <= {"text", "source_type"}:
+            return self._error(400, "Expected text and optional source_type only")
         try:
-            report = scan_text(payload["text"])
+            report = scan_text(payload["text"], source_type=payload.get("source_type", "unknown"))
         except (TypeError, ValueError):
             return self._error(422, "Invalid or oversized text")
         self._json(200, report)
