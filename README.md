@@ -112,6 +112,12 @@ Previously open Windows/AD checks remain open: domain-user authentication and
 effective SMB/NTFS access on the rebuilt V2 Windows roles. Centralized Linux
 telemetry and one repeatable detection/remediation/retest exercise are now verified.
 
+## Security operations detection practice
+
+**SOC Detection Engine V1** adds a lightweight offline Python learning module for UFW firewall blocks and SSH authentication telemetry. It ships with sanitized fictional fixtures, explainable rule alerts, regression tests and automated checks. Its results require analyst context and must not be described as proven intrusions or live production detection.
+
+[Open SOC Detection Engine](projects/soc-detection-engine/README.md)
+
 ## Documentation and evidence
 
 - [V2 migration, scope and purple-team plan](docs/ENTERPRISE_CYBER_LAB_V2.md)
