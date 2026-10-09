@@ -1,0 +1,22 @@
+{
+  "fixture_count": 13,
+  "true_positive": 6,
+  "false_positive": 1,
+  "true_negative": 5,
+  "false_negative": 1,
+  "precision_on_toy_fixtures": 0.857,
+  "recall_on_toy_fixtures": 0.857,
+  "misclassified_fixtures": [
+    {
+      "fixture": "educational_quote",
+      "expected_suspicious": false,
+      "flagged": true
+    },
+    {
+      "fixture": "subtle_redirection",
+      "expected_suspicious": true,
+      "flagged": false
+    }
+  ],
+  "warning": "These tiny, hand-written examples are not representative of real-world prompt injection detection."
+}
