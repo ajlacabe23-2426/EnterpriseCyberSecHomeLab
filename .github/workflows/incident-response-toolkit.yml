@@ -1,0 +1,49 @@
+name: Verify Incident Response Toolkit
+on:
+  pull_request:
+    paths:
+      - 'projects/incident-response-toolkit/**'
+      - '.github/workflows/incident-response-toolkit.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'projects/incident-response-toolkit/**'
+      - '.github/workflows/incident-response-toolkit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-incident-case-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Test offline case generation and validation
+        working-directory: projects/incident-response-toolkit
+        run: python -m unittest discover -s irkit -p 'test_*.py' -v
+      - name: Smoke-test fictional case report formats
+        working-directory: projects/incident-response-toolkit
+        run: |
+          python -m irkit.cli --file fixtures/synthetic-case.json > /tmp/ir-case.json
+          python -m irkit.cli --file fixtures/synthetic-case.json --format markdown > /tmp/ir-case.md
+          python -m irkit.cli --file fixtures/benign-case.json > /tmp/ir-benign.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          full = json.loads(Path('/tmp/ir-case.json').read_text(encoding='utf-8'))
+          benign = json.loads(Path('/tmp/ir-benign.json').read_text(encoding='utf-8'))
+          markdown = Path('/tmp/ir-case.md').read_text(encoding='utf-8')
+          assert full['case_state'] == 'triage_unverified'
+          assert len(full['timeline']) == 5
+          assert len(full['source_provenance']) == 2
+          assert full['configuration_summary']['not_checked'] == 1
+          assert benign['timeline'] == []
+          assert 'No intrusion is confirmed' in markdown
+          assert '10.10.10.30' not in markdown
+          print('Synthetic and benign case verification passed')
+          PY
