@@ -1,6 +1,7 @@
 "use strict";
 const element = id => document.getElementById(id);
 const source = element("source-text");
+const sourceType = element("source-type");
 const button = element("analyze-button");
 const count = element("character-count");
 const status = element("request-status");
@@ -28,6 +29,7 @@ function resetReport() {
   element("review-level").textContent = "—";
   element("findings-count").textContent = "NO SCAN";
   element("recommendation").textContent = "A rule match should trigger investigation of its source and the privileges available to the AI application—not an automatic verdict.";
+  element("source-guidance").textContent = "Choose a source category to learn how its trust boundary should be handled.";
   const empty = document.createElement("p");
   empty.className = "empty-state";
   empty.textContent = "Findings and safe character-offset references will appear here. Source text is never included in the report.";
@@ -44,6 +46,7 @@ function renderReport(report) {
   element("review-level").textContent = risk==="low_signal"?"LOW":risk.toUpperCase();
   element("findings-count").textContent = String(report.finding_count) + (report.finding_count===1?" MATCH":" MATCHES");
   element("recommendation").textContent = report.recommendation;
+  element("source-guidance").textContent = "SOURCE TRUST: UNTRUSTED — " + report.source_context.handling_guidance;
   const list = element("findings");
   list.replaceChildren();
   if (!report.findings.length) {
@@ -81,18 +84,19 @@ async function analyze() {
   }
   const currentEpoch = ++scanEpoch;
   const submittedText = source.value;
+  const submittedSource = sourceType.value;
   button.disabled=true;
   statusMessage("Analyzing against local defensive rules…");
   try {
     const response=await fetch("/api/analyze",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({text:submittedText}),
+      body:JSON.stringify({text:submittedText,source_type:submittedSource}),
       cache:"no-store"
     });
     const result=await response.json();
     if(!response.ok)throw new Error(result.error||"Unable to analyze text");
-    if(currentEpoch !== scanEpoch || source.value !== submittedText)return;
+    if(currentEpoch !== scanEpoch || source.value !== submittedText || sourceType.value !== submittedSource)return;
     renderReport(result);
     statusMessage("Local scan complete. Source text has not been stored by PromptGuard.");
   }catch(error) {
@@ -104,6 +108,7 @@ async function analyze() {
 element("demo-button").addEventListener("click",()=>{
   scanEpoch++;
   source.value=sample;
+  sourceType.value="retrieved_document";
   updateCount();
   resetReport();
   statusMessage("Fictional sample loaded. Click Analyze text to test the rules.");
@@ -117,6 +122,11 @@ element("clear-button").addEventListener("click",()=>{
   source.focus();
 });
 button.addEventListener("click",analyze);
+sourceType.addEventListener("change",()=>{
+  scanEpoch++;
+  resetReport();
+  statusMessage("Source context changed. Analyze again to update the report.");
+});
 source.addEventListener("input",()=>{
   scanEpoch++;
   updateCount();
