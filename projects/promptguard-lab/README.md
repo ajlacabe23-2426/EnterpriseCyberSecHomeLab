@@ -16,6 +16,40 @@ python -m promptguard.cli --file /path/to/your/owned-sample.txt
 
 Use fictional, non-sensitive examples for exercises. Don't submit passwords, tokens, customer information, or confidential documents.
 
+## Local browser dashboard (V2)
+
+The visual workbench uses only Python's standard library and runs on your own machine.
+From the repository's `projects/promptguard-lab` directory:
+
+```bash
+python -m promptguard.dashboard
+```
+
+Open **http://127.0.0.1:4186** in the same computer's browser. Use **Load demo**
+and **Analyze text** to view an explainable report with risk signals, matched
+rule identifiers, and character offsets. Select **Clear** to remove the input
+and report from the page. Stop the local server with Ctrl+C.
+
+- The server binds to **127.0.0.1 only**; it does not serve other computers on
+  your network or use third-party APIs.
+- Requests must come from its own localhost origin and are never cached.
+- Untrusted text is screened as data only, never executed or sent to a model.
+- The server never writes submitted text to disk or logs it; scan reports
+  deliberately omit the source text.
+- The UI discards an old scan response if its input changed before completion.
+- The heuristics can still miss prompt injection or flag harmless quotations.
+  Treat results as analyst triage, not an automated authorization decision.
+
+For local-only testing without starting the dashboard manually:
+
+```bash
+python -m unittest discover -s promptguard -p 'test_*.py' -v
+```
+
+The dashboard and scanner are designed for fictional training data, not real
+passwords, confidential documents, or sensitive personal information.
+
+
 ## Interpreting results
 
 - `low_signal`: none of this version's rules matched; **not a safety certificate**.
