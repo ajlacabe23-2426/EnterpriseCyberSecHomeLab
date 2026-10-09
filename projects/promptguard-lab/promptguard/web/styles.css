@@ -46,6 +46,9 @@ h2 {font-weight:750;font-size:18px;letter-spacing:-.3px;margin:8px 0}
 .pill {color:var(--cyan);font-weight:750;letter-spacing:1px;font-size:10px;background:#193038;border:1px solid #2a444b;border-radius:7px;padding:7px 9px;white-space:nowrap}
 .panel-note {margin:6px 0 21px;color:var(--muted);font-size:12px;max-width:450px}
 .field-label {display:block;color:var(--muted);letter-spacing:1.4px;font-size:10px;font-weight:800;margin-bottom:10px}
+select {display:block;width:100%;border:1px solid #344b55;border-radius:9px;background:#0a171e;color:var(--text);padding:11px 12px;margin-bottom:11px;font-size:12px}
+select:focus-visible {outline:2px solid var(--mint);outline-offset:3px}
+#source-guidance {padding-top:10px;border-top:1px solid var(--border);color:var(--mint)}
 textarea {display:block;width:100%;resize:vertical;min-height:246px;border-radius:9px;border:1px solid #344b55;background:#0a171e;padding:15px;color:var(--text);font-size:13px;line-height:1.65}
 textarea::placeholder {color:#64818a}
 .input-meta {display:flex;justify-content:space-between;gap:12px;color:var(--dim);font-size:10px;margin-top:10px}
