@@ -129,7 +129,8 @@ def _listeners_check(text: str | None) -> dict[str, str]:
         if len(parts) < 5 or parts[0].upper() != "LISTEN":
             malformed += 1
             continue
-        local = parts[4]
+        # ss -lntH columns: State Recv-Q Send-Q Local Peer; index 3 is Local.
+        local = parts[3]
         if ":" not in local:
             malformed += 1
             continue
