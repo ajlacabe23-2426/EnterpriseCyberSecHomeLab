@@ -112,6 +112,12 @@ Previously open Windows/AD checks remain open: domain-user authentication and
 effective SMB/NTFS access on the rebuilt V2 Windows roles. Centralized Linux
 telemetry and one repeatable detection/remediation/retest exercise are now verified.
 
+## Linux security assessment practice
+
+**Linux Hardening Auditor V1** is an offline, read-only educational review tool for SSH, UFW, privileged account records, sudo-group membership, and TCP listening sockets. It uses fictional configuration snapshots and reports PASS / REVIEW / FAIL / NOT_CHECKED with scoped evidence, rather than claiming to certify a live host.
+
+[Open Linux Hardening Auditor](projects/linux-hardening-auditor/README.md)
+
 ## Documentation and evidence
 
 - [V2 migration, scope and purple-team plan](docs/ENTERPRISE_CYBER_LAB_V2.md)

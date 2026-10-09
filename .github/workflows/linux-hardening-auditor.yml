@@ -1,0 +1,47 @@
+name: Verify Linux Hardening Auditor
+on:
+  pull_request:
+    paths:
+      - 'projects/linux-hardening-auditor/**'
+      - '.github/workflows/linux-hardening-auditor.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'projects/linux-hardening-auditor/**'
+      - '.github/workflows/linux-hardening-auditor.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-audit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Run offline Linux configuration audit tests
+        working-directory: projects/linux-hardening-auditor
+        run: python -m unittest discover -s auditlab -p 'test_*.py' -v
+      - name: Check safe, review and missing-evidence snapshots
+        working-directory: projects/linux-hardening-auditor
+        run: |
+          python -m auditlab.cli --file fixtures/secure-fictional.json > /tmp/audit-secure.json
+          python -m auditlab.cli --file fixtures/review-fictional.json > /tmp/audit-review.json
+          python -m auditlab.cli --file fixtures/incomplete-fictional.json > /tmp/audit-incomplete.json
+          python - <<'PY'
+          import json
+          with open('/tmp/audit-secure.json', encoding='utf-8') as f:
+              secure = json.load(f)
+          with open('/tmp/audit-review.json', encoding='utf-8') as f:
+              review = json.load(f)
+          with open('/tmp/audit-incomplete.json', encoding='utf-8') as f:
+              incomplete = json.load(f)
+          assert secure['summary'] == {'pass': 8, 'review': 0, 'fail': 0, 'not_checked': 0}
+          assert review['summary'] == {'pass': 0, 'review': 3, 'fail': 4, 'not_checked': 1}
+          assert incomplete['summary'] == {'pass': 0, 'review': 0, 'fail': 0, 'not_checked': 8}
+          print('Secure / review / incomplete snapshot verification: PASS')
+          PY

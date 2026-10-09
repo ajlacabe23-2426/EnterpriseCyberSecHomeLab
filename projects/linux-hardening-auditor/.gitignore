@@ -1,0 +1,9 @@
+# Never commit real host configuration snapshots or sensitive identity data.
+private-snapshots/
+reports/
+*.pcap
+*.pcapng
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
