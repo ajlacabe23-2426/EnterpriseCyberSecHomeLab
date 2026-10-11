@@ -137,6 +137,10 @@ The following are **observed host results**, not re-executions by GitHub CI or b
 
 A successful logged test marker proves **message receipt**, not that a full intrusion-detection pipeline or network isolation is secure. Continue with UTM topology, repository candidate checks, and offline software acceptance. Do not treat the Windows V1 historical results as current Mac V2 verification.
 
+### UBUNTU01 UTM adapter observations — 2026-10-11
+
+Screenshots provided from UTM show that UBUNTU01 has two virtio-net-pci network adapters: one **Shared Network** (NAT) and the other **Host Only**, selecting **ATLASHOME-LAB** with UTM DHCP not provided. This matches the two-adapter configuration observed on SEC01. **PASS — intended adapter configuration observed.** This alone does **not** verify full network isolation, inter-host firewall filtering, or the current UBUNTU01 assigned IP address. No settings were changed.
+
 ## Results worksheet (fill only after execution)
 
 | Gate | Commit / host evidence | Expected | Observed | Result (PASS / FAIL / BLOCKED / NOT_RUN) | Redacted evidence link |
