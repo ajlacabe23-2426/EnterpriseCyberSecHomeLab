@@ -23,6 +23,10 @@ README preserves earlier Windows/VirtualBox work separately from the Mac migrati
 
 - Larger VM footprint and integrations only after host resources are measured; never attack external networks or real users.
 
+## Mac acceptance handoff
+
+- [Mac acceptance commands, current PR heads and integration sequencing (2026-10-11)](MAC_ACCEPTANCE_AND_INTEGRATION_2026-10-11.md). This is a pending verification checklist, not evidence of Mac execution or integration completion.
+
 ## Release gates
 
 Local authorization and isolation, reproducible fixtures, no secrets in logs, harmless test events, host-observed outcomes. Software-only changes can be reviewed remotely, but VM verification cannot be claimed without Mac execution evidence.
