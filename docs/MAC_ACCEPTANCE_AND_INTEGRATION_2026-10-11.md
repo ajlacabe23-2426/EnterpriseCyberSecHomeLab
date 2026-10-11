@@ -38,6 +38,8 @@ With Git and Python 3.11+ available, from the **repository root** of a clean clo
 
 ```sh
 git status --short
+# Stop if the working tree is not clean; preserve local changes.
+export HOMELAB_ROOT="$PWD"
 git fetch origin
 git worktree add --detach "$HOMELAB_ROOT/../homelab-promptguard" origin/feat/promptguard-source-evaluation-v3
 git worktree add --detach "$HOMELAB_ROOT/../homelab-soc" origin/feat/soc-detection-engine-v1
