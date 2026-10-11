@@ -141,6 +141,10 @@ A successful logged test marker proves **message receipt**, not that a full intr
 
 Screenshots provided from UTM show that UBUNTU01 has two virtio-net-pci network adapters: one **Shared Network** (NAT) and the other **Host Only**, selecting **ATLASHOME-LAB** with UTM DHCP not provided. This matches the two-adapter configuration observed on SEC01. **PASS — intended adapter configuration observed.** This alone does **not** verify full network isolation, inter-host firewall filtering, or the current UBUNTU01 assigned IP address. No settings were changed.
 
+### KALI01 UTM adapter observations — 2026-10-11
+
+User-provided UTM screenshots show **KALI01** has two virtio-net-pci adapters: one set to **Host Only** using the named **ATLASHOME-LAB** network (UTM DHCP not provided), and one set to **Shared Network** (NAT). **PASS — planned Kali adapter modes observed.** Together with earlier SEC01 and UBUNTU01 observations, all three Linux VM adapter modes match the expected two-network topology. This confirms configuration, **not** firewall-level or full network isolation; SEC01 has a wildcard TCP/514 listener, whose allowed ingress remains to be verified. No configuration changes were made.
+
 ## Results worksheet (fill only after execution)
 
 | Gate | Commit / host evidence | Expected | Observed | Result (PASS / FAIL / BLOCKED / NOT_RUN) | Redacted evidence link |
