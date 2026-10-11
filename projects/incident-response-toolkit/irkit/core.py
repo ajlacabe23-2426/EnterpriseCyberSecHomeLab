@@ -46,7 +46,8 @@ _ID = re.compile(r"^[A-Z][A-Z0-9-]{2,39}$")
 _EVIDENCE_ID = re.compile(r"^[A-Z][A-Z0-9_-]{2,39}$")
 
 
-def _when(value: Any) -> str:
+def _parse_utc(value: Any) -> datetime:
+    """Validate a timestamp without losing sub-second precision."""
     if not isinstance(value, str) or len(value) > 40:
         raise ValueError("Timestamp must be a bounded timezone-aware ISO 8601 string")
     try:
@@ -55,7 +56,12 @@ def _when(value: Any) -> str:
         raise ValueError("Invalid timestamp") from error
     if dt.tzinfo is None or dt.utcoffset() is None:
         raise ValueError("Timestamp must contain an explicit UTC offset")
-    return dt.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    return dt.astimezone(timezone.utc)
+
+
+def _when(value: Any) -> str:
+    # Reports display seconds, but validation must compare full precision.
+    return _parse_utc(value).isoformat(timespec="seconds").replace("+00:00", "Z")
 
 
 def _digest(value: dict) -> str:
@@ -93,10 +99,12 @@ def _soc(report: Any) -> tuple[list[dict[str, object]], dict[str, object]]:
             raise ValueError("Unknown SOC alert rule or severity")
         if not _positive_int(alert.get("event_count")):
             raise ValueError("Invalid aggregated SOC event count")
-        start = _when(alert.get("first_seen_utc"))
-        end = _when(alert.get("last_seen_utc"))
-        if start > end:
+        start_dt = _parse_utc(alert.get("first_seen_utc"))
+        end_dt = _parse_utc(alert.get("last_seen_utc"))
+        if start_dt > end_dt:
             raise ValueError("SOC window ends before it begins")
+        start = _when(alert["first_seen_utc"])
+        end = _when(alert["last_seen_utc"])
         ids[rule] += 1
         timeline.append({
             "at_utc": end,
