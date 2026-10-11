@@ -112,6 +112,12 @@ Previously open Windows/AD checks remain open: domain-user authentication and
 effective SMB/NTFS access on the rebuilt V2 Windows roles. Centralized Linux
 telemetry and one repeatable detection/remediation/retest exercise are now verified.
 
+## Incident-response investigation practice
+
+**Incident Response Toolkit V1** is an offline, read-only Python training module that combines fictional SOC Detection Engine alerts and Linux Hardening Auditor findings into evidence-referenced timelines, provenance fingerprints, and reviewable case reports. Findings remain unverified until independently investigated.
+
+[Open the Incident Response Toolkit](projects/incident-response-toolkit/README.md)
+
 ## Documentation and evidence
 
 - [V2 migration, scope and purple-team plan](docs/ENTERPRISE_CYBER_LAB_V2.md)

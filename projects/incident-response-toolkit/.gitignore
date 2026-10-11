@@ -1,0 +1,9 @@
+# Never version raw incidents, private alerts, real host details or unsanitized exports.
+private-cases/
+reports/
+*.pcap
+*.pcapng
+__pycache__/
+*.pyc
+.venv/
+.DS_Store

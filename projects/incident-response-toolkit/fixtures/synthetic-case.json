@@ -1,0 +1,87 @@
+{
+  "schema": "incident-case-input-v1",
+  "case_id": "LAB-CASE-001",
+  "soc_report": {
+    "schema": "soc-detection-lab-v1",
+    "mode": "OFFLINE_EDUCATIONAL_TRIAGE",
+    "source_lines": 11,
+    "recognized_events": 9,
+    "skipped_lines": 2,
+    "alerts": [
+      {
+        "rule_id": "repeated_firewall_blocks",
+        "severity": "medium",
+        "source": "10.10.10.30",
+        "host": "UBUNTU01",
+        "destination": "10.10.10.20",
+        "event_count": 3,
+        "first_seen_utc": "2026-09-04T13:00:00Z",
+        "last_seen_utc": "2026-09-04T13:01:00Z",
+        "explanation": "Three or more blocked connections to one port.",
+        "investigation_step": "Check approved troubleshooting.",
+        "destination_port": 8080
+      },
+      {
+        "rule_id": "repeated_ssh_auth_failures",
+        "severity": "high",
+        "source": "10.10.10.30",
+        "host": "UBUNTU01",
+        "destination": "UBUNTU01",
+        "event_count": 3,
+        "first_seen_utc": "2026-09-04T13:04:00Z",
+        "last_seen_utc": "2026-09-04T13:05:00Z",
+        "explanation": "Three or more failed SSH logins.",
+        "investigation_step": "Check authorized access."
+      }
+    ]
+  },
+  "audit_report": {
+    "schema": "linux-hardening-report-v1",
+    "mode": "OFFLINE_READ_ONLY_SNAPSHOT",
+    "checks": [
+      {
+        "check_id": "permitrootlogin",
+        "status": "pass",
+        "finding": "SSH root login",
+        "evidence_summary": "disabled"
+      },
+      {
+        "check_id": "passwordauthentication",
+        "status": "review",
+        "finding": "SSH password authentication",
+        "evidence_summary": "requires contextual review"
+      },
+      {
+        "check_id": "ufw_status",
+        "status": "pass",
+        "finding": "UFW status",
+        "evidence_summary": "active"
+      },
+      {
+        "check_id": "ufw_incoming",
+        "status": "not_checked",
+        "finding": "UFW incoming",
+        "evidence_summary": "unknown"
+      }
+    ],
+    "summary": {
+      "pass": 2,
+      "review": 1,
+      "fail": 0,
+      "not_checked": 1
+    }
+  },
+  "analyst_events": [
+    {
+      "evidence_id": "EVD-ANALYST-1",
+      "timestamp_utc": "2026-09-04T13:10:00Z",
+      "kind": "analyst_review"
+    },
+    {
+      "evidence_id": "EVD-RETEST-1",
+      "timestamp_utc": "2026-09-04T13:15:00Z",
+      "kind": "retest"
+    }
+  ],
+  "audit_reviewed_at_utc": "2026-09-04T13:09:00Z"
+}
