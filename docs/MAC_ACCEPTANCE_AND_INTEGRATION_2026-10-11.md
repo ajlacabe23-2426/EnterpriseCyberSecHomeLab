@@ -129,7 +129,9 @@ The following are **observed host results**, not re-executions by GitHub CI or b
 | SEC01 TCP listener | `ss -lnt` showed `0.0.0.0:514` and `[::]:514` | PASS (listener exists); exposure/interface filtering requires review |
 | SEC01 historical centralized files | `sudo find /var/log/remote -type f` returned files beneath `/var/log/remote/ubuntu001/`; file timestamps shown in listing were September 3 | PASS (historical files found) |
 | Fresh UBUNTU01 → SEC01 log message | After user generated `logger "LAB-CHECK-1011"` on UBUNTU01, a SEC01 screenshot showed `LAB-CHECK-1011` in its centralized log path at `2026-10-11T18:21:38+00:00` | PASS (fresh application-layer log receipt) |
-| Actual private network isolation and firewall filtering | Listener is bound on all interfaces, but ingress filtering and topology have not yet been checked | NOT_RUN |
+| SEC01 first UTM adapter | Screenshot shows Shared Network (NAT) / virtio-net-pci | PASS (configuration observed) |
+| SEC01 second UTM adapter | Screenshot shows Host Only, named host network `ATLASHOME-LAB`, no UTM DHCP, virtio-net-pci | PASS (configuration observed) |
+| Actual private network isolation and firewall filtering | Both UTM adapters observed; TCP/514 still listens on all interfaces, and ingress filtering / cross-interface reachability have not yet been checked | NOT_RUN |
 | DC01 and Win11-Client01 on Mac | User confirmed both Windows VMs are absent from UTM | BLOCKED (VMs not installed) |
 | KALI01 / UBUNTU01 detailed UTM topology | Presence/config/resource budget not recorded yet | NOT_RUN |
 
