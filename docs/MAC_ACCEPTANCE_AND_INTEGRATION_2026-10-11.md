@@ -117,6 +117,24 @@ python3 -m irkit.cli --file fixtures/benign-case.json --format markdown
 
 No merges, production deployments, hosted mutations, network scans or VM operations are authorized by this document.
 
+## Mac acceptance observations — 2026-10-11 (user-provided screenshots)
+
+The following are **observed host results**, not re-executions by GitHub CI or by the assistant. Screenshot evidence was supplied in the conversation; **no screenshots or raw logs have been committed**.
+
+| Check | Source / observation | Status |
+| --- | --- | --- |
+| SEC01 boot and interactive login | User successfully booted and logged in on UTM | PASS (user observed) |
+| SEC01 host and IPv4 addresses | Screenshot shows `sec01`, private lab `10.10.10.50/24`, and shared/NAT `192.168.64.5/24` | PASS (configuration observed); isolation not yet verified |
+| SEC01 rsyslog service | `systemctl is-active rsyslog` returned `active` | PASS |
+| SEC01 TCP listener | `ss -lnt` showed `0.0.0.0:514` and `[::]:514` | PASS (listener exists); exposure/interface filtering requires review |
+| SEC01 historical centralized files | `sudo find /var/log/remote -type f` returned files beneath `/var/log/remote/ubuntu001/`; file timestamps shown in listing were September 3 | PASS (historical files found) |
+| Fresh UBUNTU01 → SEC01 log message | After user generated `logger "LAB-CHECK-1011"` on UBUNTU01, a SEC01 screenshot showed `LAB-CHECK-1011` in its centralized log path at `2026-10-11T18:21:38+00:00` | PASS (fresh application-layer log receipt) |
+| Actual private network isolation and firewall filtering | Listener is bound on all interfaces, but ingress filtering and topology have not yet been checked | NOT_RUN |
+| DC01 and Win11-Client01 on Mac | User confirmed both Windows VMs are absent from UTM | BLOCKED (VMs not installed) |
+| KALI01 / UBUNTU01 detailed UTM topology | Presence/config/resource budget not recorded yet | NOT_RUN |
+
+A successful logged test marker proves **message receipt**, not that a full intrusion-detection pipeline or network isolation is secure. Continue with UTM topology, repository candidate checks, and offline software acceptance. Do not treat the Windows V1 historical results as current Mac V2 verification.
+
 ## Results worksheet (fill only after execution)
 
 | Gate | Commit / host evidence | Expected | Observed | Result (PASS / FAIL / BLOCKED / NOT_RUN) | Redacted evidence link |
