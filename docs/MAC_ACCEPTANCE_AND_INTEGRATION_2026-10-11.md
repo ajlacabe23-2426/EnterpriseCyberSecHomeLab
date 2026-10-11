@@ -4,7 +4,7 @@
 
 ## Remote evidence baseline
 
-All SHAs refer to the exact PR heads inspected on 2026-10-11. Their individual GitHub Actions workflow runs were **completed / success** at those SHAs (not an integrated-system test).
+All SHAs refer to PR heads inspected or updated on 2026-10-11. The historical #3–#7 PR-head GitHub Actions workflow runs were **completed / success** at those SHAs; PR #8 was updated with a timestamp-validation fix and must have its new SHA's CI result checked before approval. None is an integrated-system test.
 
 | PR | Branch | Frozen inspected head | Verified GitHub Actions workflow | Integration state |
 | --- | --- | --- | --- | --- |
@@ -13,7 +13,7 @@ All SHAs refer to the exact PR heads inspected on 2026-10-11. Their individual G
 | [#6](https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/pull/6) | `feat/promptguard-source-evaluation-v3` | `763ea913e9ee303cd3bc018ceb23a6d9f1ce3158` | Verify PromptGuard Lab: success | Open; base is #4 branch |
 | [#5](https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/pull/5) | `feat/soc-detection-engine-v1` | `4b5a9e894504814ec661bcfe6a99dd64d1e65130` | Verify SOC Detection Engine: success | Open; based on main |
 | [#7](https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/pull/7) | `feat/linux-hardening-auditor-v1` | `0e173a9a4846d829d7c5c48c60c626f2267af72e` | Verify Linux Hardening Auditor: success | Open; based on main |
-| [#8](https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/pull/8) | `feat/incident-response-toolkit-v1` | `8033dcf62c44bd418ab6a7a7a64c016af9b53052` | Verify Incident Response Toolkit: success | Open; based on main |
+| [#8](https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/pull/8) | `feat/incident-response-toolkit-v1` | `eed9057df422bf609a096976e994da1f1a1a7151` | Verify Incident Response Toolkit: new check pending | Open; based on main |
 
 **Important:** All of #3, #5, #7 and #8 add a different section to main's `README.md`. Review and retain **all** sections during integration; independently green CI does not prove the later merges will be conflict-free. #1 is an older Windows/VirtualBox diagnostics draft (`2046f9054a97e8a97db01a8565d7133762767058`, currently not mergeable) and should **not** be merged into the Mac migration by assumption. #2 was previously merged. #9 is a governance draft; its changes require their own review.
 
@@ -34,15 +34,15 @@ All SHAs refer to the exact PR heads inspected on 2026-10-11. Their individual G
 
 ## B. Prepare clean candidate checkouts — MANUAL, NOT RUN
 
-With Git and Python 3.11+ available, from the **repository root** of a clean clone (or existing clean repository). Each later command block also starts from this repository root; use a fresh Terminal window or return to the root between modules:
+With Git and Python 3.11+ available, from the **repository root** of a clean clone (or existing clean repository). Each later command block also starts from this repository root; stay in the same Terminal session so the exported `HOMELAB_ROOT` variable remains available; each module command uses that absolute root even if the current directory changes:
 
 ```sh
 git status --short
 git fetch origin
-git worktree add --detach ../homelab-promptguard origin/feat/promptguard-source-evaluation-v3
-git worktree add --detach ../homelab-soc origin/feat/soc-detection-engine-v1
-git worktree add --detach ../homelab-audit origin/feat/linux-hardening-auditor-v1
-git worktree add --detach ../homelab-ir origin/feat/incident-response-toolkit-v1
+git worktree add --detach "$HOMELAB_ROOT/../homelab-promptguard" origin/feat/promptguard-source-evaluation-v3
+git worktree add --detach "$HOMELAB_ROOT/../homelab-soc" origin/feat/soc-detection-engine-v1
+git worktree add --detach "$HOMELAB_ROOT/../homelab-audit" origin/feat/linux-hardening-auditor-v1
+git worktree add --detach "$HOMELAB_ROOT/../homelab-ir" origin/feat/incident-response-toolkit-v1
 ```
 
 Record each `git -C "$HOMELAB_ROOT/../homelab-..." rev-parse HEAD` and compare with the SHA table. **If a branch has changed, stop and rebaseline the evidence instead of asserting the old CI success applies to it.** If a worktree folder already exists, inspect it first; do not overwrite it. Avoid adding this document's branch as a runtime feature dependency.
