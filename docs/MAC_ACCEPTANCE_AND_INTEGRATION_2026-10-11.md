@@ -145,6 +145,10 @@ Screenshots provided from UTM show that UBUNTU01 has two virtio-net-pci network 
 
 User-provided UTM screenshots show **KALI01** has two virtio-net-pci adapters: one set to **Host Only** using the named **ATLASHOME-LAB** network (UTM DHCP not provided), and one set to **Shared Network** (NAT). **PASS — planned Kali adapter modes observed.** Together with earlier SEC01 and UBUNTU01 observations, all three Linux VM adapter modes match the expected two-network topology. This confirms configuration, **not** firewall-level or full network isolation; SEC01 has a wildcard TCP/514 listener, whose allowed ingress remains to be verified. No configuration changes were made.
 
+### SEC01 UFW configuration evidence — 2026-10-11
+
+User-provided screenshot of `sudo ufw status verbose` from SEC01 showed **Status: active**, **Logging: on (low)**, **Default: deny (incoming), allow (outgoing), disabled (routed)**. The allow rule for **514/tcp** is restricted to **10.10.10.0/24**, consistent with the intended lab log source subnet (**PASS: configured ingress restriction**, not an independent reachability test). **OpenSSH / 22/tcp** has **ALLOW IN Anywhere** and **Anywhere (v6)** (**REVIEW: overly broad management access on reachable interfaces**). This does not establish public Internet exposure because SEC01 is behind UTM's shared/NAT network. Do **not** alter firewall rules until a trusted management path and rollback procedure are verified. Firewall behavior, interface exposure and full isolation remain **NOT_RUN** pending observed testing. No changes were made to the VM.
+
 ## Results worksheet (fill only after execution)
 
 | Gate | Commit / host evidence | Expected | Observed | Result (PASS / FAIL / BLOCKED / NOT_RUN) | Redacted evidence link |
