@@ -138,6 +138,24 @@ class CaseTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             build_case(case)
 
+    def test_fractional_second_reversed_alert_window_rejected(self):
+        case = fixture()
+        alert = case["soc_report"]["alerts"][0]
+        # These timestamps have the same whole second but reversed chronology.
+        # Rounding before comparison would incorrectly accept this window.
+        alert["first_seen_utc"] = "2026-09-04T13:00:00.900Z"
+        alert["last_seen_utc"] = "2026-09-04T13:00:00.100Z"
+        with self.assertRaises(ValueError):
+            build_case(case)
+
+    def test_fractional_second_window_with_ordered_times_accepted(self):
+        case = fixture()
+        alert = case["soc_report"]["alerts"][0]
+        alert["first_seen_utc"] = "2026-09-04T13:00:00.100Z"
+        alert["last_seen_utc"] = "2026-09-04T13:00:00.900Z"
+        report = build_case(case)
+        self.assertEqual(report["case_state"], "triage_unverified")
+
     def test_naive_timestamp_rejected(self):
         case = fixture()
         case["soc_report"]["alerts"][0]["first_seen_utc"] = "2026-09-04T13:00:00"
