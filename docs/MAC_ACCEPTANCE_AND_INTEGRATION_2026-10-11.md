@@ -20,7 +20,7 @@ All SHAs refer to the exact PR heads inspected on 2026-10-11. Their individual G
 ## Guardrails for the session
 
 - MacBook Air M3 / Apple Silicon / 8 GB unified memory is the recorded target. Only proceed on personally controlled, isolated virtual hosts. No external scans, real credentials, sensitive input, production data, paid services or hosted configuration changes.
-- First check current repository branch and working-tree state. Do not switch branches with uncommitted user changes. Commands below use disposable **read-only worktrees** on candidate PR commits and do not merge anything.
+- First check current repository branch and working-tree state. Do not switch branches with uncommitted user changes. Commands below use separate **detached worktrees** on candidate PR commits (the checkouts are writable, so avoid edits) and do not merge anything.
 - Keep test fixture results separate from **host-observed** measurements. Screenshots must redact identifying details, usernames, tokens, non-lab addresses and raw logs before being shared or committed.
 - Capture date/time, macOS / UTM version, Git SHA, test command, expected result, observed result, sanitized evidence reference and PASS/FAIL/BLOCKED for each gate. Record exact failures rather than retitling them as PASS.
 - Full-stack acceptance requires a new combined candidate after authorized integration. Individual PR tests do not certify a shared runtime.
@@ -34,7 +34,7 @@ All SHAs refer to the exact PR heads inspected on 2026-10-11. Their individual G
 
 ## B. Prepare clean candidate checkouts — MANUAL, NOT RUN
 
-With Git and Python 3.11+ available, from a clean clone (or existing clean repository):
+With Git and Python 3.11+ available, from the **repository root** of a clean clone (or existing clean repository). Each later command block also starts from this repository root; use a fresh Terminal window or return to the root between modules:
 
 ```sh
 git status --short
@@ -45,12 +45,12 @@ git worktree add --detach ../homelab-audit origin/feat/linux-hardening-auditor-v
 git worktree add --detach ../homelab-ir origin/feat/incident-response-toolkit-v1
 ```
 
-Record each `git -C ../homelab-... rev-parse HEAD` and compare with the SHA table. **If a branch has changed, stop and rebaseline the evidence instead of asserting the old CI success applies to it.** If a worktree folder already exists, inspect it first; do not overwrite it. Avoid adding this document's branch as a runtime feature dependency.
+Record each `git -C "$HOMELAB_ROOT/../homelab-..." rev-parse HEAD` and compare with the SHA table. **If a branch has changed, stop and rebaseline the evidence instead of asserting the old CI success applies to it.** If a worktree folder already exists, inspect it first; do not overwrite it. Avoid adding this document's branch as a runtime feature dependency.
 
 ## C. PromptGuard local acceptance — MANUAL, NOT RUN
 
 ```sh
-cd ../homelab-promptguard/projects/promptguard-lab
+cd "$HOMELAB_ROOT/../homelab-promptguard/projects/promptguard-lab"
 python3 -m unittest discover -s promptguard -p 'test_*.py' -v
 python3 -m promptguard.evaluate
 python3 -m promptguard.evaluation_v3
@@ -65,7 +65,7 @@ python3 -m promptguard.dashboard
 ## D. SOC and hardening offline acceptance — MANUAL, NOT RUN
 
 ```sh
-cd ../homelab-soc/projects/soc-detection-engine
+cd "$HOMELAB_ROOT/../homelab-soc/projects/soc-detection-engine"
 python3 -m unittest discover -s soclab -p 'test_*.py' -v
 python3 -m soclab.cli --file fixtures/synthetic-sec01.log
 python3 -m soclab.cli --file fixtures/synthetic-benign.log
@@ -75,7 +75,7 @@ python3 -m soclab.cli --file fixtures/synthetic-benign.log
 - [ ] Confirm malformed / incomplete input fails safely; no real SEC01 data has been contacted by these commands.
 
 ```sh
-cd ../homelab-audit/projects/linux-hardening-auditor
+cd "$HOMELAB_ROOT/../homelab-audit/projects/linux-hardening-auditor"
 python3 -m unittest discover -s auditlab -p 'test_*.py' -v
 python3 -m auditlab.cli --file fixtures/secure-fictional.json
 python3 -m auditlab.cli --file fixtures/review-fictional.json
@@ -88,7 +88,7 @@ python3 -m auditlab.cli --file fixtures/incomplete-fictional.json
 ## E. Incident casework acceptance — MANUAL, NOT RUN
 
 ```sh
-cd ../homelab-ir/projects/incident-response-toolkit
+cd "$HOMELAB_ROOT/../homelab-ir/projects/incident-response-toolkit"
 python3 -m unittest discover -s irkit -p 'test_*.py' -v
 python3 -m irkit.cli --file fixtures/synthetic-case.json --format markdown
 python3 -m irkit.cli --file fixtures/benign-case.json --format markdown
