@@ -123,3 +123,7 @@ telemetry and one repeatable detection/remediation/retest exercise are now verif
 
 The existing repository URL remains stable so earlier links and history continue
 to work. The project display name and current documentation are Enterprise Cyber Lab V2.
+
+## Interactive homelab evidence and learning map
+
+The [offline 3D map](projects/homelab-map/README.md) connects VM/network roles, recorded telemetry and independent defensive Python tools. Evidence is dated and distinguishes configuration, observed receipt, historical results, review concerns, pending tests and blocked Windows roles. A synthetic firewall/listener exercise teaches port states without operating any host. This is a curated snapshot, not live discovery or an integrated detection service.
