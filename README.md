@@ -100,6 +100,13 @@ Kali retest confirmed that TCP/8080 returned to filtered.
 
 [Full purple-team workflow validation — 2026-09-04](docs/purple-team-workflow-validation-2026-09-04.md)
 
+### Next hands-on session — SOC-001 (prepared, not yet run)
+
+The next 20–30 minute exercise is a **benign, tagged syslog heartbeat** from UBUNTU01 to SEC01, followed by read-only analyst triage and an evidence record. It builds directly on the already verified UFW/rsyslog path rather than reinstalling logging. No VM configuration changes are planned.
+
+[SOC-001 centralized telemetry triage instructions](docs/SOC_001_TELEMETRY_TRIAGE.md)
+
+
 ## Preserved original work
 
 - Windows Server, AD DS, DNS and the `atlasiqlab.local` domain.
