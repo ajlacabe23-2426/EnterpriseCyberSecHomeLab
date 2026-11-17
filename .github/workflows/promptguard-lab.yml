@@ -1,0 +1,53 @@
+name: Verify PromptGuard Lab
+on:
+  pull_request:
+    paths:
+      - 'projects/promptguard-lab/**'
+      - '.github/workflows/promptguard-lab.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'projects/promptguard-lab/**'
+      - '.github/workflows/promptguard-lab.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Run offline prompt-injection screening tests
+        working-directory: projects/promptguard-lab
+        run: python -m unittest discover -s promptguard -p 'test_*.py' -v
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+      - name: Syntax-check local dashboard JavaScript
+        working-directory: projects/promptguard-lab
+        run: node --check promptguard/web/app.js
+      - name: Reproduce toy-fixture evaluation
+        working-directory: projects/promptguard-lab
+        run: python -m promptguard.evaluate
+      - name: Verify V3 development and holdout evaluation
+        working-directory: projects/promptguard-lab
+        run: |
+          python -m promptguard.evaluation_v3 > /tmp/promptguard-v3-evaluation.json
+          python - <<'PY'
+          import json
+          with open('/tmp/promptguard-v3-evaluation.json', encoding='utf-8') as handle:
+              report = json.load(handle)
+          assert report['schema'] == 'promptguard-evaluation-v3'
+          assert report['development']['total'] == 20
+          assert report['holdout']['total'] == 16
+          for label in ('development', 'holdout'):
+              result = report[label]
+              assert result['tp'] + result['tn'] + result['fp'] + result['fn'] == result['total']
+          print('Development/holdout metrics reproducible and internally consistent')
+          PY

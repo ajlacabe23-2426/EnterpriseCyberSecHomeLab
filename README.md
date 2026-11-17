@@ -123,3 +123,37 @@ telemetry and one repeatable detection/remediation/retest exercise are now verif
 
 The existing repository URL remains stable so earlier links and history continue
 to work. The project display name and current documentation are Enterprise Cyber Lab V2.
+
+## Defensive AI security learning module
+
+**PromptGuard Lab v1** is an offline Python exercise for recognizing possible prompt-injection instructions in untrusted text. It includes transparent rules, fictional test fixtures, false-positive/false-negative analysis, and automated regression tests. It is an educational detector, not a production security boundary.
+
+[Open PromptGuard Lab](projects/promptguard-lab/README.md)
+
+## Security operations detection practice
+
+**SOC Detection Engine V1** adds a lightweight offline Python learning module for UFW firewall blocks and SSH authentication telemetry. It ships with sanitized fictional fixtures, explainable rule alerts, regression tests and automated checks. Its results require analyst context and must not be described as proven intrusions or live production detection.
+
+[Open SOC Detection Engine](projects/soc-detection-engine/README.md)
+
+## Linux security assessment practice
+
+**Linux Hardening Auditor V1** is an offline, read-only educational review tool for SSH, UFW, privileged account records, sudo-group membership, and TCP listening sockets. It uses fictional configuration snapshots and reports PASS / REVIEW / FAIL / NOT_CHECKED with scoped evidence, rather than claiming to certify a live host.
+
+[Open Linux Hardening Auditor](projects/linux-hardening-auditor/README.md)
+
+## Incident-response investigation practice
+
+**Incident Response Toolkit V1** is an offline, read-only Python training module that combines fictional SOC Detection Engine alerts and Linux Hardening Auditor findings into evidence-referenced timelines, provenance fingerprints, and reviewable case reports. Findings remain unverified until independently investigated.
+
+[Open the Incident Response Toolkit](projects/incident-response-toolkit/README.md)
+
+## Interactive homelab evidence and learning map
+
+The [offline 3D map](projects/homelab-map/README.md) connects VM/network roles, recorded telemetry and independent defensive Python tools. Evidence is dated and distinguishes configuration, observed receipt, historical results, review concerns, pending tests and blocked Windows roles. A synthetic firewall/listener exercise teaches port states without operating any host. This is a curated snapshot, not live discovery or an integrated detection service.
+
+### Next hands-on session — SOC-001 (prepared, not yet run)
+
+The next 20–30 minute exercise is a **benign, tagged syslog heartbeat** from UBUNTU01 to SEC01, followed by read-only analyst triage and an evidence record. It builds directly on the already verified UFW/rsyslog path rather than reinstalling logging. No VM configuration changes are planned.
+
+[SOC-001 centralized telemetry triage instructions](docs/SOC_001_TELEMETRY_TRIAGE.md)

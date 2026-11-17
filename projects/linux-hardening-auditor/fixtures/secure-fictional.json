@@ -1,0 +1,8 @@
+{
+  "schema": "linux-audit-snapshot-v1",
+  "ssh_effective": "permitrootlogin no\npasswordauthentication no\npermitemptypasswords no\n",
+  "ufw_status": "Status: active\nLogging: on (low)\nDefault: deny (incoming), allow (outgoing), disabled (routed)\n",
+  "passwd_text": "root:x:0:0:root:/root:/bin/bash\nlearner:x:1000:1000:Lab User:/home/learner:/bin/bash\n",
+  "group_text": "root:x:0:\nsudo:x:27:\n",
+  "tcp_listening": "LISTEN 0 128 127.0.0.1:5432 0.0.0.0:*\n"
+}
