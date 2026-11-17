@@ -1,0 +1,785 @@
+{
+  "schema": "homelab-evidence-map-v1",
+  "snapshotDate": "2026-10-11",
+  "sourceRevision": "563bc45d1592168ee3b2ac84a0ed1f2c68d62a6c",
+  "sources": {
+    "current": {
+      "label": "Mac acceptance observations \u00b7 October 11",
+      "url": "/sources/current",
+      "path": "docs/MAC_ACCEPTANCE_AND_INTEGRATION_2026-10-11.md",
+      "revision": "563bc45d1592168ee3b2ac84a0ed1f2c68d62a6c",
+      "kind": "recorded-user-observation",
+      "sha256": "2b82df4cc61ce797d424fcb950be9448090c258d82e1b662f35a9bade3f894c3"
+    },
+    "purple": {
+      "label": "Manual purple-team checkpoint \u00b7 September 4",
+      "url": "/sources/purple",
+      "path": "docs/purple-team-workflow-validation-2026-09-04.md",
+      "revision": "563bc45d1592168ee3b2ac84a0ed1f2c68d62a6c",
+      "kind": "historical-v2",
+      "sha256": "23f62663f4982105ba2996cbd8b55b7855ab9fcfb8f919f6e6d213ef546170e9"
+    },
+    "migration": {
+      "label": "Mac migration and resource plan",
+      "url": "/sources/migration",
+      "path": "docs/ENTERPRISE_CYBER_LAB_V2.md",
+      "revision": "563bc45d1592168ee3b2ac84a0ed1f2c68d62a6c",
+      "kind": "migration-plan",
+      "sha256": "29421700b0958c4b5df4fc954fa065a45db4b43a8c24f35a8f8de45b7301f456"
+    },
+    "prompt": {
+      "label": "PromptGuard source \u00b7 PR #6",
+      "url": "https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/blob/763ea913e9ee303cd3bc018ceb23a6d9f1ce3158/projects/promptguard-lab/promptguard/detector.py",
+      "path": "projects/promptguard-lab/promptguard/detector.py",
+      "revision": "763ea913e9ee303cd3bc018ceb23a6d9f1ce3158",
+      "kind": "open-pr-code",
+      "pr": 6,
+      "prUrl": "https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/pull/6"
+    },
+    "soc": {
+      "label": "SOC detection source \u00b7 PR #5",
+      "url": "https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/blob/4b5a9e894504814ec661bcfe6a99dd64d1e65130/projects/soc-detection-engine/soclab/detect.py",
+      "path": "projects/soc-detection-engine/soclab/detect.py",
+      "revision": "4b5a9e894504814ec661bcfe6a99dd64d1e65130",
+      "kind": "open-pr-code",
+      "pr": 5,
+      "prUrl": "https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/pull/5"
+    },
+    "audit": {
+      "label": "Linux auditor source \u00b7 PR #7",
+      "url": "https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/blob/0e173a9a4846d829d7c5c48c60c626f2267af72e/projects/linux-hardening-auditor/auditlab/audit.py",
+      "path": "projects/linux-hardening-auditor/auditlab/audit.py",
+      "revision": "0e173a9a4846d829d7c5c48c60c626f2267af72e",
+      "kind": "open-pr-code",
+      "pr": 7,
+      "prUrl": "https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/pull/7"
+    },
+    "ir": {
+      "label": "Incident toolkit source \u00b7 PR #8",
+      "url": "https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/blob/eed9057df422bf609a096976e994da1f1a1a7151/projects/incident-response-toolkit/irkit/core.py",
+      "path": "projects/incident-response-toolkit/irkit/core.py",
+      "revision": "eed9057df422bf609a096976e994da1f1a1a7151",
+      "kind": "open-pr-code",
+      "pr": 8,
+      "prUrl": "https://github.com/ajlacabe23-2426/EnterpriseCyberSecHomeLab/pull/8"
+    }
+  },
+  "nodes": [
+    {
+      "id": "host",
+      "title": "MacBook / UTM",
+      "kind": "host",
+      "status": "NOT_RUN",
+      "role": "Recorded host target: MacBook Air M3, ARM64, 8 GB unified memory. Installed RAM does not establish usable simultaneous VM capacity.",
+      "skills": [
+        "Virtualization",
+        "Resource planning"
+      ],
+      "nextCheck": "Measure actual host memory and VM allocations before increasing the running footprint.",
+      "claims": [
+        {
+          "title": "Recorded host target",
+          "status": "HISTORICAL",
+          "date": "2026-09-02",
+          "source": "migration",
+          "detail": "The migration plan records M3 / ARM64 / 8 GB. Current OS/UTM versions, available memory and concurrent capacity remain unmeasured in the October handoff."
+        }
+      ]
+    },
+    {
+      "id": "nat",
+      "title": "Shared / NAT",
+      "kind": "network",
+      "status": "CONFIG_OBSERVED",
+      "role": "Three Linux VMs have recorded Shared Network adapters. NAT connectivity and private lab traffic are distinct paths.",
+      "skills": [
+        "Routing",
+        "Interface exposure"
+      ],
+      "nextCheck": "Check actual routes and ingress behavior from approved lab interfaces; adapter modes do not prove isolation.",
+      "claims": [
+        {
+          "title": "Adapter modes",
+          "status": "CONFIG_OBSERVED",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "SEC01, UBUNTU01 and KALI01 UTM screenshots record Shared Network and Host Only adapters. This does not establish public Internet exposure or firewall behavior."
+        }
+      ]
+    },
+    {
+      "id": "lab",
+      "title": "ATLASHOME-LAB",
+      "kind": "network",
+      "status": "NOT_RUN",
+      "role": "Named Host Only network, with UTM DHCP not provided, recorded on all three Linux guests. Isolation is a separate behavioral gate.",
+      "skills": [
+        "Segmentation",
+        "Evidence-based verification"
+      ],
+      "nextCheck": "Verify private reachability, cross-interface behavior and allowed ingress using an approved Mac session.",
+      "claims": [
+        {
+          "title": "Host Only configuration",
+          "status": "CONFIG_OBSERVED",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "All three Linux guests select ATLASHOME-LAB; UTM DHCP is not provided."
+        },
+        {
+          "title": "Behavioral isolation",
+          "status": "NOT_RUN",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "Firewall filtering and full isolation have not been independently tested in the current acceptance record."
+        }
+      ]
+    },
+    {
+      "id": "kali",
+      "title": "KALI01",
+      "kind": "vm",
+      "status": "CONFIG_OBSERVED",
+      "role": "Owned-lab security testing workstation. Recorded September lab address: 10.10.10.30; current assigned IP is not freshly established by adapter screenshots.",
+      "skills": [
+        "Authorized test scope",
+        "Network interpretation"
+      ],
+      "nextCheck": "Record current guest addresses, routes and resource allocation; retain owned-lab scope.",
+      "claims": [
+        {
+          "title": "Dual adapter setup",
+          "status": "CONFIG_OBSERVED",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "Host Only ATLASHOME-LAB and Shared/NAT adapter modes were observed."
+        },
+        {
+          "title": "Scoped probe evidence",
+          "status": "HISTORICAL",
+          "date": "2026-09-04",
+          "source": "purple",
+          "detail": "KALI01 generated the documented controlled port probes; this is a dated checkpoint, not a live scan."
+        }
+      ]
+    },
+    {
+      "id": "ubuntu",
+      "title": "UBUNTU01",
+      "kind": "vm",
+      "status": "OBSERVED",
+      "role": "Linux administration and controlled target role. Recorded September lab address: 10.10.10.20; the October adapter screenshots do not reverify that IP.",
+      "skills": [
+        "Linux administration",
+        "Telemetry source attribution"
+      ],
+      "nextCheck": "Record current IP/routes and independently verify current UFW behavior without disrupting the trusted management path.",
+      "claims": [
+        {
+          "title": "Dual adapter setup",
+          "status": "CONFIG_OBSERVED",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "Shared/NAT plus Host Only ATLASHOME-LAB were observed."
+        },
+        {
+          "title": "Fresh test log receipt",
+          "status": "OBSERVED",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "The UBUNTU01-generated harmless test marker was seen in SEC01 centralized logs at 2026-10-11T18:21:38+00:00. Message receipt is narrower than intrusion detection."
+        }
+      ]
+    },
+    {
+      "id": "sec",
+      "title": "SEC01",
+      "kind": "vm",
+      "status": "REVIEW",
+      "role": "Centralized rsyslog receiver and blue-team role. October evidence records private address 10.10.10.50/24.",
+      "skills": [
+        "Log collection",
+        "Management access review"
+      ],
+      "nextCheck": "Verify allowed ingress and trusted management access/rollback before changing firewall rules.",
+      "claims": [
+        {
+          "title": "Service and listener",
+          "status": "OBSERVED",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "rsyslog active; TCP/514 listens on IPv4/IPv6 wildcard addresses. A listener alone does not prove safe reachability."
+        },
+        {
+          "title": "Configured log ingress",
+          "status": "CONFIG_OBSERVED",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "UFW active, default deny incoming; 514/tcp allow restricted to 10.10.10.0/24."
+        },
+        {
+          "title": "Broad management access",
+          "status": "REVIEW",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "OpenSSH/22 permits Anywhere and Anywhere (v6). Exposure and filtering behavior need verification; NAT alone does not establish public reachability."
+        }
+      ]
+    },
+    {
+      "id": "dc",
+      "title": "DC01",
+      "kind": "vm",
+      "status": "BLOCKED",
+      "role": "Planned Windows identity/DNS role. Windows V1 accomplishments remain historical; no working V2 Active Directory service is asserted.",
+      "skills": [
+        "Identity",
+        "DNS"
+      ],
+      "nextCheck": "Windows VM installation and fresh Mac domain evidence remain future, separately authorized work.",
+      "claims": [
+        {
+          "title": "Mac guest absent",
+          "status": "BLOCKED",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "User confirmed DC01 and Win11-Client01 are absent from UTM. No V1 address is reused as a verified V2 assignment."
+        }
+      ]
+    },
+    {
+      "id": "win",
+      "title": "Win11-Client01",
+      "kind": "vm",
+      "status": "BLOCKED",
+      "role": "Planned Windows domain endpoint and access-control role. No current Mac domain authentication or SMB/NTFS verification.",
+      "skills": [
+        "Domain authentication",
+        "Access control"
+      ],
+      "nextCheck": "After the Windows roles exist, verify identity, DNS, domain sign-in and effective share permissions.",
+      "claims": [
+        {
+          "title": "Mac guest absent",
+          "status": "BLOCKED",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "Windows guest is not installed. Prior Windows/VirtualBox evidence is not proof of Mac parity."
+        }
+      ]
+    },
+    {
+      "id": "ufw",
+      "title": "Target UFW",
+      "kind": "control",
+      "status": "HISTORICAL",
+      "role": "Host firewall on UBUNTU01 generated block telemetry in the dated purple-team exercise. SEC01 firewall configuration is recorded separately.",
+      "skills": [
+        "Firewall vs listener",
+        "Log correlation"
+      ],
+      "nextCheck": "Reverify current target firewall and final restored state in an approved owned-lab exercise.",
+      "claims": [
+        {
+          "title": "Control / service distinction",
+          "status": "HISTORICAL",
+          "date": "2026-09-04",
+          "source": "purple",
+          "detail": "Documented TCP/8080 progression: filtered \u2192 closed \u2192 open \u2192 filtered, changing one control at a time and restoring the baseline."
+        }
+      ]
+    },
+    {
+      "id": "logs",
+      "title": "Centralized logs",
+      "kind": "evidence",
+      "status": "OBSERVED",
+      "role": "Historical remote files and a fresh harmless application-layer marker were observed. Receipt is not an automated alert or incident conclusion.",
+      "skills": [
+        "Timestamps",
+        "Evidence provenance"
+      ],
+      "nextCheck": "Supply a sanitized export for offline analysis and compare expected vs observed detections.",
+      "claims": [
+        {
+          "title": "Fresh receipt",
+          "status": "OBSERVED",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "The new marker appeared in SEC01 centralized logs. Historical files alone were not used to claim fresh delivery."
+        }
+      ]
+    },
+    {
+      "id": "verify",
+      "title": "Retest / restore",
+      "kind": "control",
+      "status": "NOT_RUN",
+      "role": "Current isolation/filtering and integrated detection acceptance are open. A September restore/retest checkpoint exists separately.",
+      "skills": [
+        "Incident verification",
+        "Repeatable restoration"
+      ],
+      "nextCheck": "Capture date, expected result, observed result and sanitized evidence after an approved retest.",
+      "claims": [
+        {
+          "title": "Current behavioral gates",
+          "status": "NOT_RUN",
+          "date": "2026-10-11",
+          "source": "current",
+          "detail": "Adapter configuration and fresh message receipt do not close current filtering/isolation or combined software acceptance."
+        },
+        {
+          "title": "Prior restore/retest",
+          "status": "HISTORICAL",
+          "date": "2026-09-04",
+          "source": "purple",
+          "detail": "The earlier manual exercise restored the filtered TCP/8080 state and correlated UFW evidence."
+        }
+      ]
+    },
+    {
+      "id": "prompt",
+      "title": "PromptGuard",
+      "kind": "tool",
+      "status": "OPEN_PR",
+      "role": "Offline heuristic prompt-injection indicators. Inputs remain untrusted; fictional development/holdout evaluation does not prove real-world protection.",
+      "skills": [
+        "Defensive Python",
+        "Evidence handling"
+      ],
+      "nextCheck": "Use the independently frozen candidate and fictional fixtures; Mac acceptance/integration remains pending.",
+      "claims": [
+        {
+          "title": "Independent software candidate",
+          "status": "OPEN_PR",
+          "date": "2026-10-11",
+          "source": "prompt",
+          "detail": "Synthetic text \u2192 heuristic findings. This is a separate AI security exercise, not a network telemetry consumer. PR #6 is open at the cited source revision. Earlier exact-head CI is recorded in the handoff; these tools are not installed or integrated by the map."
+        }
+      ]
+    },
+    {
+      "id": "soc",
+      "title": "SOC detection",
+      "kind": "tool",
+      "status": "OPEN_PR",
+      "role": "Offline UFW/SSH event parsing and rule-based triage. Supplied sanitized logs are required; alerts are investigative leads, not proof of compromise.",
+      "skills": [
+        "Defensive Python",
+        "Evidence handling"
+      ],
+      "nextCheck": "Use the independently frozen candidate and fictional fixtures; Mac acceptance/integration remains pending.",
+      "claims": [
+        {
+          "title": "Independent software candidate",
+          "status": "OPEN_PR",
+          "date": "2026-10-11",
+          "source": "soc",
+          "detail": "Sanitized log export \u2192 parser \u2192 detection rules \u2192 JSON report. Live ingestion is not implemented by this map. PR #5 is open at the cited source revision. Earlier exact-head CI is recorded in the handoff; these tools are not installed or integrated by the map."
+        }
+      ]
+    },
+    {
+      "id": "audit",
+      "title": "Linux auditor",
+      "kind": "tool",
+      "status": "OPEN_PR",
+      "role": "Offline configuration snapshots reviewed as PASS, REVIEW, FAIL or NOT_CHECKED. Missing evidence is not a PASS.",
+      "skills": [
+        "Defensive Python",
+        "Evidence handling"
+      ],
+      "nextCheck": "Use the independently frozen candidate and fictional fixtures; Mac acceptance/integration remains pending.",
+      "claims": [
+        {
+          "title": "Independent software candidate",
+          "status": "OPEN_PR",
+          "date": "2026-10-11",
+          "source": "audit",
+          "detail": "Supplied configuration snapshot \u2192 narrow checks \u2192 JSON report. The map does not collect or change host settings. PR #7 is open at the cited source revision. Earlier exact-head CI is recorded in the handoff; these tools are not installed or integrated by the map."
+        }
+      ]
+    },
+    {
+      "id": "ir",
+      "title": "Incident toolkit",
+      "kind": "tool",
+      "status": "OPEN_PR",
+      "role": "Offline casework from supplied SOC and audit JSON. Timelines and fingerprints preserve evidence boundaries; investigations remain unverified.",
+      "skills": [
+        "Defensive Python",
+        "Evidence handling"
+      ],
+      "nextCheck": "Use the independently frozen candidate and fictional fixtures; Mac acceptance/integration remains pending.",
+      "claims": [
+        {
+          "title": "Independent software candidate",
+          "status": "OPEN_PR",
+          "date": "2026-10-11",
+          "source": "ir",
+          "detail": "Supplied reports \u2192 schema checks \u2192 timeline and case report. End-to-end SOC/audit integration remains pending. PR #8 is open at the cited source revision. Earlier exact-head CI is recorded in the handoff; these tools are not installed or integrated by the map."
+        }
+      ]
+    }
+  ],
+  "views": {
+    "topology": {
+      "title": "VM & network topology",
+      "subtitle": "Recorded configuration and open verification gates. Connections are declared relationships, not measured live links.",
+      "nodes": [
+        {
+          "id": "host",
+          "position": [
+            -335,
+            -170,
+            -60
+          ]
+        },
+        {
+          "id": "nat",
+          "position": [
+            320,
+            -170,
+            60
+          ]
+        },
+        {
+          "id": "lab",
+          "position": [
+            0,
+            -100,
+            0
+          ]
+        },
+        {
+          "id": "kali",
+          "position": [
+            -310,
+            55,
+            50
+          ]
+        },
+        {
+          "id": "ubuntu",
+          "position": [
+            0,
+            55,
+            0
+          ]
+        },
+        {
+          "id": "sec",
+          "position": [
+            310,
+            55,
+            -50
+          ]
+        },
+        {
+          "id": "dc",
+          "position": [
+            -170,
+            210,
+            -50
+          ]
+        },
+        {
+          "id": "win",
+          "position": [
+            170,
+            210,
+            50
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "host-lab",
+          "fromNode": "host",
+          "toNode": "lab",
+          "label": "UTM environment",
+          "status": "NOT_RUN"
+        },
+        {
+          "id": "lab-kali",
+          "fromNode": "lab",
+          "toNode": "kali",
+          "label": "Host Only adapter",
+          "status": "CONFIG_OBSERVED"
+        },
+        {
+          "id": "lab-ubuntu",
+          "fromNode": "lab",
+          "toNode": "ubuntu",
+          "label": "Host Only adapter",
+          "status": "CONFIG_OBSERVED"
+        },
+        {
+          "id": "lab-sec",
+          "fromNode": "lab",
+          "toNode": "sec",
+          "label": "Host Only adapter",
+          "status": "CONFIG_OBSERVED"
+        },
+        {
+          "id": "nat-kali",
+          "fromNode": "nat",
+          "toNode": "kali",
+          "label": "Shared adapter",
+          "status": "CONFIG_OBSERVED"
+        },
+        {
+          "id": "nat-ubuntu",
+          "fromNode": "nat",
+          "toNode": "ubuntu",
+          "label": "Shared adapter",
+          "status": "CONFIG_OBSERVED"
+        },
+        {
+          "id": "nat-sec",
+          "fromNode": "nat",
+          "toNode": "sec",
+          "label": "Shared adapter",
+          "status": "CONFIG_OBSERVED"
+        },
+        {
+          "id": "lab-dc",
+          "fromNode": "lab",
+          "toNode": "dc",
+          "label": "Planned role",
+          "status": "BLOCKED"
+        },
+        {
+          "id": "lab-win",
+          "fromNode": "lab",
+          "toNode": "win",
+          "label": "Planned role",
+          "status": "BLOCKED"
+        }
+      ]
+    },
+    "telemetry": {
+      "title": "Telemetry & evidence path",
+      "subtitle": "Separate historical test evidence, fresh log receipt and pending offline analysis.",
+      "nodes": [
+        {
+          "id": "kali",
+          "position": [
+            -350,
+            -135,
+            -30
+          ]
+        },
+        {
+          "id": "ubuntu",
+          "position": [
+            -110,
+            -135,
+            30
+          ]
+        },
+        {
+          "id": "ufw",
+          "position": [
+            -110,
+            20,
+            -60
+          ]
+        },
+        {
+          "id": "sec",
+          "position": [
+            150,
+            -135,
+            -30
+          ]
+        },
+        {
+          "id": "logs",
+          "position": [
+            150,
+            20,
+            40
+          ]
+        },
+        {
+          "id": "soc",
+          "position": [
+            350,
+            95,
+            -30
+          ]
+        },
+        {
+          "id": "ir",
+          "position": [
+            150,
+            205,
+            30
+          ]
+        },
+        {
+          "id": "verify",
+          "position": [
+            -160,
+            205,
+            -30
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "kali-ubuntu",
+          "fromNode": "kali",
+          "toNode": "ubuntu",
+          "label": "Prior scoped probes",
+          "status": "HISTORICAL"
+        },
+        {
+          "id": "ubuntu-ufw",
+          "fromNode": "ubuntu",
+          "toNode": "ufw",
+          "label": "Prior firewall events",
+          "status": "HISTORICAL"
+        },
+        {
+          "id": "ubuntu-sec",
+          "fromNode": "ubuntu",
+          "toNode": "sec",
+          "label": "Fresh test message",
+          "status": "OBSERVED"
+        },
+        {
+          "id": "ufw-sec",
+          "fromNode": "ufw",
+          "toNode": "sec",
+          "label": "Prior UFW forwarding",
+          "status": "HISTORICAL"
+        },
+        {
+          "id": "sec-logs",
+          "fromNode": "sec",
+          "toNode": "logs",
+          "label": "Fresh receipt",
+          "status": "OBSERVED"
+        },
+        {
+          "id": "logs-soc",
+          "fromNode": "logs",
+          "toNode": "soc",
+          "label": "Sanitized export needed",
+          "status": "NOT_RUN"
+        },
+        {
+          "id": "soc-ir",
+          "fromNode": "soc",
+          "toNode": "ir",
+          "label": "Report integration pending",
+          "status": "NOT_RUN"
+        },
+        {
+          "id": "ir-verify",
+          "fromNode": "ir",
+          "toNode": "verify",
+          "label": "Analyst retest gate",
+          "status": "NOT_RUN"
+        }
+      ]
+    },
+    "tools": {
+      "title": "Offline code & learning tools",
+      "subtitle": "Open PR source locations are pinned. Dependency lines describe intended input formats, not a running integration.",
+      "nodes": [
+        {
+          "id": "prompt",
+          "position": [
+            -330,
+            -150,
+            -30
+          ]
+        },
+        {
+          "id": "logs",
+          "position": [
+            -330,
+            70,
+            40
+          ]
+        },
+        {
+          "id": "soc",
+          "position": [
+            -70,
+            -30,
+            -40
+          ]
+        },
+        {
+          "id": "audit",
+          "position": [
+            200,
+            -145,
+            35
+          ]
+        },
+        {
+          "id": "ir",
+          "position": [
+            200,
+            75,
+            -20
+          ]
+        },
+        {
+          "id": "verify",
+          "position": [
+            350,
+            215,
+            25
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "logs-soc",
+          "fromNode": "logs",
+          "toNode": "soc",
+          "label": "Supplied log export",
+          "status": "NOT_RUN"
+        },
+        {
+          "id": "soc-ir",
+          "fromNode": "soc",
+          "toNode": "ir",
+          "label": "SOC JSON input",
+          "status": "NOT_RUN"
+        },
+        {
+          "id": "audit-ir",
+          "fromNode": "audit",
+          "toNode": "ir",
+          "label": "Audit JSON input",
+          "status": "NOT_RUN"
+        },
+        {
+          "id": "ir-verify",
+          "fromNode": "ir",
+          "toNode": "verify",
+          "label": "Case review / retest",
+          "status": "NOT_RUN"
+        }
+      ]
+    }
+  },
+  "trace": [
+    "ubuntu-sec",
+    "sec-logs"
+  ],
+  "limits": [
+    "Curated evidence snapshot; no VM discovery, host access or live status.",
+    "A recorded PASS applies only to its named check and date.",
+    "Open PR tools are separately reviewed and not integrated by this map.",
+    "Historical V1 evidence never verifies Mac V2 roles."
+  ]
+}
