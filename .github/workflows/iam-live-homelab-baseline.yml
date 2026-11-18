@@ -1,0 +1,37 @@
+name: Validate IAM Live Homelab Baseline
+on:
+  pull_request:
+    paths:
+      - 'scripts/iam-linux-readonly-check.sh'
+      - 'docs/IAM_000_LIVE_BASELINE_2026-11-17.md'
+      - 'docs/IAM_001_LINUX_ACCESS_REVIEW.md'
+      - '.github/workflows/iam-live-homelab-baseline.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/iam-linux-readonly-check.sh'
+      - 'docs/IAM_000_LIVE_BASELINE_2026-11-17.md'
+      - 'docs/IAM_001_LINUX_ACCESS_REVIEW.md'
+      - '.github/workflows/iam-live-homelab-baseline.yml'
+permissions:
+  contents: read
+jobs:
+  syntax-and-guardrails:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check shell syntax
+        run: bash -n scripts/iam-linux-readonly-check.sh
+      - name: Reject unrecognized roles
+        run: |
+          if bash scripts/iam-linux-readonly-check.sh unexpected > /tmp/iam-invalid.out 2>&1; then
+            echo "Unexpected successful exit for invalid role"; exit 1
+          fi
+          grep -q 'Usage:' /tmp/iam-invalid.out
+      - name: Confirm host verification remains manual
+        run: |
+          grep -q 'NOT_VERIFIED' scripts/iam-linux-readonly-check.sh
+          grep -q 'NOT RUN' docs/IAM_000_LIVE_BASELINE_2026-11-17.md
