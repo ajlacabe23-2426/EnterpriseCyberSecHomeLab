@@ -119,3 +119,14 @@ python -m promptguard.evaluate
 ```
 
 The tiny evaluation includes *intentional* false-positive and false-negative examples so the report is honest about both kinds of detection mistakes. Its precision and recall are educational measurements on hand-written samples, **not a claim about production detection accuracy**.
+
+## Independent action-authorization boundary (V4 training extension)
+
+The additional [action boundary exercise](TRUST_BOUNDARY_EXERCISE.md) demonstrates why screening alone cannot grant permissions. It tests a **separate synthetic approval scope**, explicit trusted-workflow origin, least privilege, and approval expiration. An injected document or tool output cannot authorize operations in this simulation; a clean scan cannot bypass access policy.
+
+```bash
+python3 -m promptguard.action_boundary_demo
+python3 -m unittest discover -s promptguard -p 'test_*.py' -v
+```
+
+This is **not** live tool execution, a real IAM system, a signed approval, a production guardrail, or evidence of Mac VM success. The example trusted-workflow label and approval are manually supplied fictional inputs; any real service must derive them from an independently authenticated backend.
