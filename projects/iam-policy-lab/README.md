@@ -12,11 +12,11 @@ python3 -m iamlab
 python3 -m unittest discover -s . -p 'test_*.py' -v
 ~~~
 
-All sample identities, role names, access requests and timestamps are fictional. No network access, administrative rights, tokens, credentials or third-party services are needed. The code never calls a real IAM system.
+All sample identities, role names, access requests and timestamps are fictional. No network access, administrative rights, tokens, credentials or third-party services are needed. The code never calls a real IAM system. For privileged requests, the simulator now requires an explicit non-self-target assertion and distinct fictional actor/approver identifiers. These are **self-supplied fixture attributes, not verified identity proofs**; a real authorization service must independently bind them to authenticated identity and approvals.
 
 ## Watch / do / explain
 
-1. **Watch:** Run `python3 -m iamlab` and observe the nine labeled scenarios: basic role-permitted read, unknown role, least-privilege rejection, MFA required, independent approval required, no self-approval, expired elevation, overly long elevation, and compliant short-lived elevation.
+1. **Watch:** Run `python3 -m iamlab` and observe the twelve labeled scenarios: basic role-permitted read, unknown role, least-privilege rejection, MFA required, independent approval required, no self-approval, expired elevation, overly long elevation, and compliant short-lived elevation, plus missing target attestation, same-person approval and missing approver identity.
 2. **Do:** In `fixtures/synthetic-requests.json`, create a fictional case in which the `auditor` attempts to change a `role_assignment`. Predict the reason code and run tests. Restore the original fixture afterward or update the expected result deliberately.
 3. **Explain:** Describe the difference between *authentication* (the independently established actor and MFA proof), *authorization* (role/resource/action match), and *privileged access governance* (approval plus short expiration). Note that the demo accepts supplied attributes for educational purposes and cannot establish their authenticity.
 4. **Verify:** Test that removing the MFA flag, removing approval, using a nonexistent role, extending TTL over four hours, or replaying after expiry results in DENY. Capture terminal output without real names or accounts.
@@ -30,7 +30,8 @@ All sample identities, role names, access requests and timestamps are fictional.
 | MFA prerequisite | `MFA_REQUIRED` | Negative test |
 | Separation of duties | `SELF_APPROVAL_PROHIBITED` | Negative test |
 | Temporary elevation | `ACCESS_EXPIRED` / `ELEVATION_TOO_LONG` | Boundary test |
-| Independent review | `HUMAN_APPROVAL_REQUIRED` | No-approval test |
+| Independent review | `HUMAN_APPROVAL_REQUIRED` / `APPROVER_IDENTITIES_REQUIRED` | No-approval or missing reviewer test |
+| Separation of duties | `SELF_APPROVAL_PROHIBITED` / `SELF_TARGET_STATUS_REQUIRED` | Same-actor reviewer and missing target-attestation tests |
 
 ### Suggested interview exercise
 
