@@ -1,0 +1,201 @@
+{
+  "as_of": "2026-11-17T18:00:00Z",
+  "cases": [
+    {
+      "id": "read-allowed",
+      "request": {
+        "role": "helpdesk",
+        "resource": "user_profile",
+        "action": "read"
+      },
+      "expected": {
+        "decision": "ALLOW",
+        "reason": "POLICY_REQUIREMENTS_MET"
+      }
+    },
+    {
+      "id": "unknown-role",
+      "request": {
+        "role": "intern",
+        "resource": "user_profile",
+        "action": "read"
+      },
+      "expected": {
+        "decision": "DENY",
+        "reason": "UNKNOWN_ROLE"
+      }
+    },
+    {
+      "id": "permission-denied",
+      "request": {
+        "role": "auditor",
+        "resource": "role_assignment",
+        "action": "change"
+      },
+      "expected": {
+        "decision": "DENY",
+        "reason": "LEAST_PRIVILEGE_BLOCK"
+      }
+    },
+    {
+      "id": "admin-mfa-missing",
+      "request": {
+        "role": "identity_admin",
+        "resource": "role_assignment",
+        "action": "change",
+        "mfa_verified": false,
+        "approval_confirmed": true,
+        "expires_at": "2026-11-17T19:00:00Z",
+        "self_target": false,
+        "actor_id": "fictional-operator",
+        "approver_id": "fictional-reviewer"
+      },
+      "expected": {
+        "decision": "DENY",
+        "reason": "MFA_REQUIRED"
+      }
+    },
+    {
+      "id": "admin-approval-missing",
+      "request": {
+        "role": "identity_admin",
+        "resource": "role_assignment",
+        "action": "change",
+        "mfa_verified": true,
+        "approval_confirmed": false,
+        "expires_at": "2026-11-17T19:00:00Z",
+        "self_target": false,
+        "actor_id": "fictional-operator",
+        "approver_id": "fictional-reviewer"
+      },
+      "expected": {
+        "decision": "DENY",
+        "reason": "HUMAN_APPROVAL_REQUIRED"
+      }
+    },
+    {
+      "id": "self-approval",
+      "request": {
+        "role": "identity_admin",
+        "resource": "role_assignment",
+        "action": "change",
+        "self_target": true,
+        "mfa_verified": true,
+        "approval_confirmed": true,
+        "expires_at": "2026-11-17T19:00:00Z",
+        "actor_id": "fictional-operator",
+        "approver_id": "fictional-reviewer"
+      },
+      "expected": {
+        "decision": "DENY",
+        "reason": "SELF_APPROVAL_PROHIBITED"
+      }
+    },
+    {
+      "id": "stale-elevation",
+      "request": {
+        "role": "identity_admin",
+        "resource": "role_assignment",
+        "action": "change",
+        "mfa_verified": true,
+        "approval_confirmed": true,
+        "expires_at": "2026-11-17T17:59:59Z",
+        "self_target": false,
+        "actor_id": "fictional-operator",
+        "approver_id": "fictional-reviewer"
+      },
+      "expected": {
+        "decision": "DENY",
+        "reason": "ACCESS_EXPIRED"
+      }
+    },
+    {
+      "id": "too-long",
+      "request": {
+        "role": "identity_admin",
+        "resource": "role_assignment",
+        "action": "change",
+        "mfa_verified": true,
+        "approval_confirmed": true,
+        "expires_at": "2026-11-18T00:00:00Z",
+        "self_target": false,
+        "actor_id": "fictional-operator",
+        "approver_id": "fictional-reviewer"
+      },
+      "expected": {
+        "decision": "DENY",
+        "reason": "ELEVATION_TOO_LONG"
+      }
+    },
+    {
+      "id": "admin-reviewed",
+      "request": {
+        "role": "identity_admin",
+        "resource": "role_assignment",
+        "action": "change",
+        "mfa_verified": true,
+        "approval_confirmed": true,
+        "expires_at": "2026-11-17T19:00:00Z",
+        "self_target": false,
+        "actor_id": "fictional-operator",
+        "approver_id": "fictional-reviewer"
+      },
+      "expected": {
+        "decision": "ALLOW",
+        "reason": "POLICY_REQUIREMENTS_MET"
+      }
+    },
+    {
+      "id": "missing-self-target-attestation",
+      "request": {
+        "role": "identity_admin",
+        "resource": "role_assignment",
+        "action": "change",
+        "actor_id": "fictional-operator",
+        "approver_id": "fictional-reviewer",
+        "mfa_verified": true,
+        "approval_confirmed": true,
+        "expires_at": "2026-11-17T19:00:00Z"
+      },
+      "expected": {
+        "decision": "DENY",
+        "reason": "SELF_TARGET_STATUS_REQUIRED"
+      }
+    },
+    {
+      "id": "same-person-approval",
+      "request": {
+        "role": "identity_admin",
+        "resource": "role_assignment",
+        "action": "change",
+        "self_target": false,
+        "actor_id": "fictional-operator",
+        "approver_id": "fictional-operator",
+        "mfa_verified": true,
+        "approval_confirmed": true,
+        "expires_at": "2026-11-17T19:00:00Z"
+      },
+      "expected": {
+        "decision": "DENY",
+        "reason": "SELF_APPROVAL_PROHIBITED"
+      }
+    },
+    {
+      "id": "approver-missing",
+      "request": {
+        "role": "identity_admin",
+        "resource": "role_assignment",
+        "action": "change",
+        "self_target": false,
+        "actor_id": "fictional-operator",
+        "mfa_verified": true,
+        "approval_confirmed": true,
+        "expires_at": "2026-11-17T19:00:00Z"
+      },
+      "expected": {
+        "decision": "DENY",
+        "reason": "APPROVER_IDENTITIES_REQUIRED"
+      }
+    }
+  ]
+}
