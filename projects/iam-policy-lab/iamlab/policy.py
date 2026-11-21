@@ -50,10 +50,19 @@ def evaluate(request: Mapping[str, Any], *, now: datetime) -> dict[str, str]:
     if requested in PRIVILEGED:
         if request.get("self_target") is True:
             return deny("SELF_APPROVAL_PROHIBITED")
+        if request.get("self_target") is not False:
+            return deny("SELF_TARGET_STATUS_REQUIRED")
         if request.get("mfa_verified") is not True:
             return deny("MFA_REQUIRED")
         if request.get("approval_confirmed") is not True:
             return deny("HUMAN_APPROVAL_REQUIRED")
+        actor = request.get("actor_id")
+        approver = request.get("approver_id")
+        if (not isinstance(actor, str) or not actor.strip()
+                or not isinstance(approver, str) or not approver.strip()):
+            return deny("APPROVER_IDENTITIES_REQUIRED")
+        if actor.strip() == approver.strip():
+            return deny("SELF_APPROVAL_PROHIBITED")
         expires_at = _utc(request.get("expires_at"))
         if expires_at is None:
             return deny("INVALID_EXPIRY")
